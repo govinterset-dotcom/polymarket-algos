@@ -1,0 +1,114 @@
+POLYMARKET BUILDER ATTRIBUTION SOURCE-AVAILABLE LICENSE
+Version 1.0
+
+Copyright (c) 2026 govinterset-dotcom. All rights reserved.
+
+IMPORTANT: This is an independent, custom source-available license. It is not
+written, approved, endorsed, or administered by Polymarket. "Polymarket" is a
+third-party trademark. This license does not grant rights to Polymarket
+software, APIs, trademarks, or services.
+
+1. DEFINITIONS
+
+"Software" means the source code, scripts, configuration examples,
+documentation, and other materials in this repository that are owned by the
+Copyright Holder.
+
+"Builder Attribution" means the Builder address and Builder Code configured
+in the original live-trading implementations and identified in the project
+documentation.
+
+"Production Use" means using, deploying, hosting, or distributing the Software
+or a derivative as part of a system that submits orders to a live prediction
+market or other live trading venue.
+
+"Derivative" means a modified version or work based on a material portion of
+the Software.
+
+2. PERMISSION GRANT
+
+Subject to the conditions in this license, the Copyright Holder grants you a
+worldwide, non-exclusive, non-transferable, royalty-free license to:
+
+(a) view, download, and study the Software;
+(b) run the Software for personal, educational, and research purposes;
+(c) modify the Software and create Derivatives; and
+(d) redistribute the unmodified Software or Derivatives, in source-code form,
+    provided that you comply with all conditions below.
+
+3. BUILDER ATTRIBUTION CONDITION FOR PRODUCTION USE
+
+If you use the Software or a Derivative for Production Use through Polymarket,
+you must:
+
+(a) preserve the original Builder Attribution in every order submitted using
+    the Software, unless the Copyright Holder gives prior written permission;
+(b) not remove, replace, obscure, bypass, or misrepresent the Builder address
+    or Builder Code in the live order-submission path;
+(c) preserve this license and the copyright notices in redistributed copies
+    and Derivatives; and
+(d) clearly identify material modifications you have made.
+
+You may not distribute or operate a Production Use Derivative that removes or
+replaces the original Builder Attribution without prior written permission
+from the Copyright Holder.
+
+4. REDISTRIBUTION AND NOTICE
+
+When redistributing the Software or a Derivative, you must include a copy of
+this license, retain applicable copyright and attribution notices, identify
+modified files, and make the source code of the distributed Derivative
+available to recipients under these same terms.
+
+You may not imply that the Copyright Holder endorses your product, service,
+trading activity, or modifications.
+
+5. NO AUTOMATIC RIGHT TO BUILDER REWARDS OR FEES
+
+This license does not guarantee Builder volume attribution, leaderboard
+credit, grants, Builder Fees, or any payment from Polymarket. Those matters
+are determined exclusively by Polymarket's current Builder Program rules,
+technical requirements, account configuration, and decisions.
+
+You are responsible for reviewing the current Polymarket terms and configuring
+your own trading system lawfully. Builder fees, where enabled, may be charged
+to users and may be subject to limits, disclosures, and platform policies.
+
+6. THIRD-PARTY COMPONENTS
+
+This license applies only to material owned by the Copyright Holder in this
+repository. Third-party libraries, SDKs, APIs, and other components remain
+subject to their own licenses and terms. Nothing here changes those terms.
+
+7. RESTRICTIONS
+
+You may not use the Software to engage in fraudulent, deceptive, abusive, or
+artificial trading activity, to manipulate Builder attribution or rankings,
+or to violate applicable law or third-party platform rules.
+
+8. NO WARRANTY; LIMITATION OF LIABILITY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE COPYRIGHT HOLDER SHALL NOT BE
+LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY ARISING FROM THE SOFTWARE
+OR ITS USE, INCLUDING TRADING LOSSES, LOST PROFITS, EXECUTION ERRORS, OR
+SERVICE INTERRUPTIONS.
+
+9. TERMINATION
+
+Your rights under this license terminate automatically if you materially
+breach its conditions. Upon termination, you must stop using and distributing
+the Software and its Derivatives unless the Copyright Holder reinstates your
+permission in writing.
+
+10. OTHER TERMS
+
+If any provision is held unenforceable, the remaining provisions remain in
+effect to the extent permitted by law. This license does not create an agency,
+partnership, employment, or endorsement relationship.
+
+For permissions beyond this license, contact the Copyright Holder through the
+GitHub profile associated with this repository.
