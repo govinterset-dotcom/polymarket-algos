@@ -1,0 +1,61 @@
+name: Reproduce a result
+description: Share an independent replay, paper, or live validation of a documented result.
+title: "[Reproduction]: "
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please distinguish historical replay, paper trading, and live execution. Never share private keys, API secrets, or sensitive account data.
+  - type: dropdown
+    id: strategy
+    attributes:
+      label: Strategy
+      options:
+        - Comeback
+        - Premove
+        - Rozi
+    validations:
+      required: true
+  - type: dropdown
+    id: method
+    attributes:
+      label: Validation method
+      options:
+        - Historical order-book replay
+        - Paper trading
+        - Live execution
+    validations:
+      required: true
+  - type: input
+    id: period
+    attributes:
+      label: Date range and market timeframe
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Exact parameters and version
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: methodology
+    attributes:
+      label: Methodology
+      description: Describe data source, entry assumptions, fees, slippage, and resolution method.
+    validations:
+      required: true
+  - type: textarea
+    id: results
+    attributes:
+      label: Results
+      description: Include trade count, win rate, net PnL, return on turnover, drawdown, and loss streaks where available.
+    validations:
+      required: true
+  - type: textarea
+    id: artifacts
+    attributes:
+      label: Supporting evidence
+      description: Link sanitized logs, datasets, charts, or commits. Do not upload secrets.
