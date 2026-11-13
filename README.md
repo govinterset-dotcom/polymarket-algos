@@ -38,6 +38,24 @@ Most short-term trading examples focus on indicators calculated from exchange ca
 
 The goal is to make the research inspectable: the code, parameters, performance assumptions, and known limitations are documented rather than hidden behind a black-box signal.
 
+## Polymarket Builder attribution
+
+All three live strategy implementations currently include the same Polymarket Builder attribution configuration:
+
+- `comeback/comeback.py`
+- `premove/premove_live.py`
+- `rozi/rozi.py`
+
+The Builder address and Builder Code are embedded in the live CLOB client configuration. They are intentionally not exposed as ordinary strategy parameters in the example `.env` files, so changing a trading threshold does not silently change order attribution.
+
+**How attribution works:** when a live order is submitted through the strategy's Polymarket CLOB integration with the configured Builder Code, eligible matched volume can be attributed to the associated Builder profile, subject to Polymarket's current program rules. Paper-mode signals and simulated fills do not create eligible attributed trading volume.
+
+**Important distinction:** publishing this repository does not itself generate Builder volume or rewards. A user must place eligible trades through an integrating third-party application. Trades made directly on Polymarket.com are not eligible for Builder attribution. Never route trades or generate artificial volume solely to manipulate rewards or leaderboard rankings.
+
+The repository is an open research codebase, not a hosted trading service. Users should inspect the code and understand the execution and fee model before running it. Any product or service built around these algorithms must clearly disclose fees and follow Polymarket's Builder Program requirements.
+
+Official resources: [Polymarket Builders](https://builders.polymarket.com/) · [Builder Program Code of Conduct](https://builders.polymarket.com/code-of-conduct).
+
 ## Performance and research notes
 
 The performance cards below summarize the specific historical datasets and configurations described. The repository also contains live-capable implementations. A replay result and a live result answer different questions: replay estimates how a rule behaved on recorded data, while live execution tests whether the signal survives real-time books, latency, available liquidity, and order handling.
