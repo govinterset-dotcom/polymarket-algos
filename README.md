@@ -1,222 +1,191 @@
-# Polymarket Up/Down Algorithms
+# Polymarket Up/Down Trading Algorithms
 
-Three live trading algorithms for **BTC Up/Down** markets on [Polymarket](https://polymarket.com):
+**Three research-driven Python strategies for BTC Up/Down markets on Polymarket — with historical order-book replay, live CLOB execution, and documented performance.**
 
-| Algorithm | TF | Idea | Frequency (history) | WR (history) |
-|-----------|-----|------|---------------------|--------------|
-| **Comeback** | 5m / 15m | Late comeback of a near-loser side | ~41 entries/day (5m) | ~97% |
-| **Premove** | 5m → next 5m | Book jump at end of window → enter next window same side | ~7–8 signals/day | ~64–65% |
-| **Rozi** | 15m | Catch sharp mid drops by tiers + streak filter | ~1.4 signals/day | ~30% |
+This repository explores three different sources of short-horizon market behavior:
 
-All three act as **takers** (FAK) via Polymarket CLOB. Default `PAPER=true` — no live orders.
+- **Comeback** — late recovery of a side that was previously priced as almost certain to lose.
+- **Premove** — a sharp order-book move near the end of one 5-minute market as a signal for the next market.
+- **Rozi** — buying sharp price dislocations at predefined levels, with optional streak and market-condition filters.
 
-> **Disclaimer.** Research code. Past results do not guarantee future performance. Live execution (latency, slippage, regime change) can differ a lot from replay. Use at your own risk.
+The strategies are deliberately different: they trade at different frequencies, have different win-rate/payoff profiles, and target different market behaviors.
+
+> **Live validation:** The author reports that all three strategies were also tested in live Polymarket market conditions and reproduced their expected research behavior/results. The numerical performance cards below are identified by their stated research/replay methodology; they should not be interpreted as a guarantee of future live returns.
+
+[Repository](https://github.com/govinterset-dotcom/polymarket-algos) · [Polymarket](https://polymarket.com)
+
+---
+
+## At a glance
+
+| Strategy | Market | Core signal | Research frequency | Research win rate |
+|---|---|---|---:|---:|
+| **Comeback** | BTC 5m | A previously near-losing side recovers late in the window | ~41 entries/day | 96.9% |
+| **Premove** | BTC 5m → next 5m | Late order-book jump predicts direction in the next market | ~7–8 signals/day | 64.5% |
+| **Rozi** | BTC 15m | Sharp drop into a price tier after a fast move | ~1.4 signals/day | ~30% |
+
+These figures are not directly comparable. A high win rate does not automatically mean a better strategy: entry price, payout asymmetry, fees, execution quality, and drawdown matter just as much.
+
+## Why this project is interesting
+
+Most short-term trading examples focus on indicators calculated from exchange candles. These strategies instead investigate **Polymarket's own order book**:
+
+- bid/ask dynamics and mid-price changes;
+- the timing and sequence of price-level touches;
+- the transition between consecutive 5-minute markets;
+- execution constraints, taker fees, and fill behavior;
+- streaks, filters, and market regimes.
+
+The goal is to make the research inspectable: the code, parameters, performance assumptions, and known limitations are documented rather than hidden behind a black-box signal.
+
+## Performance and research notes
+
+The performance cards below summarize the specific historical datasets and configurations described. The repository also contains live-capable implementations. A replay result and a live result answer different questions: replay estimates how a rule behaved on recorded data, while live execution tests whether the signal survives real-time books, latency, available liquidity, and order handling.
+
+### 1. Comeback — late recovery
+
+**Hypothesis:** If a side traded at an extremely low price earlier in a 5-minute window, but its ask later returns to a high-price band very late in the window, that recovery may contain information about the final outcome.
+
+**Signal outline**
+1. The side's mid-price was at or below `MIN_LOW` during the window.
+2. Its ask enters the configured entry band for the first time.
+3. The first qualifying touch occurs after `FRAC_MIN` of the window has elapsed.
+4. The bot attempts a capped FAK taker order.
+
+**Historical BTC 5m research card**
+
+- Dataset: 5,940 five-minute windows over 24 days (13–29 October and 2–8 November 2026).
+- Tested entry range: **0.85–0.99**, from second 260 onward.
+- Entries: **994** (about 41 per day), across 291 windows.
+- Win rate: **96.9%** (31 losses).
+- Result per $1 turnover: **+$0.028**.
+- Average entry price: **0.94**.
+- At $10 fixed stake: **+$293** over the 24-day sample; maximum drawdown **−$89**; worst day **−$33**.
+
+**Important configuration distinction:** the current example configuration uses `ENTRY_LO=0.85` and `ENTRY_HI=0.88`. The historical card above was calculated with a wider 0.85–0.99 entry range. Do not assume the card's metrics apply unchanged to every configuration.
+
+**Risk profile:** the win rate is high, but the average payout is small relative to the amount at risk. One loss can erase approximately 16 average wins. Losing streaks and drawdowns remain possible.
+
+### 2. Premove — next-window continuation
+
+**Hypothesis:** A sufficiently large move in the Polymarket Up order book during the final seconds of a 5-minute market may provide a directional signal for the next 5-minute market.
+
+**Signal outline**
+1. Observe the Up order book during the final `JUMP_LAST_S` seconds.
+2. Detect a mid-price change of at least `JUMP_MIN` over one of the configured lookback periods.
+3. Map an upward move to Up and a downward move to Down.
+4. Attempt to enter the same side in the next 5-minute market, preferably using its pre-open order book.
+
+**Historical BTC 5m research card**
+
+- Dataset: 5,940 five-minute windows over 24 days.
+- Working research variant: core signal plus chase filter.
+- Signals: **183** (about 7.6 per day).
+- Outcomes: **118 wins / 65 losses**.
+- Win rate: **64.5%** (reported interval 57–71%).
+- At $10 per trade and assumed $0.55 average entry: **+$258** after modeled fees over 24 days; maximum drawdown **−$52**; worst day **−$15**.
+
+**Entry-price sensitivity**
+
+| Assumed entry price | Return on turnover | PnL at $10/trade |
+|---:|---:|---:|
+| $0.50 | +25.5% | +$466 |
+| $0.55 | +14.1% | +$258 |
+| $0.60 | +4.7% | +$85 |
+| $0.65 | −3.2% | −$60 |
+
+Entry price is critical. The historical edge deteriorates sharply as the next market's entry becomes more expensive. The live implementation has a configurable price cap; use the actual fill price, not the signal price, when evaluating performance.
+
+### 3. Rozi — sharp dislocations
+
+**Hypothesis:** A rapid decline into a predefined low-price tier can create an asymmetric opportunity if the side had traded materially higher shortly before the drop.
+
+**Signal outline**
+1. Track each side's live Polymarket mid-price.
+2. Detect its first touch of a configured tier.
+3. Require a sufficiently high recent reference price and enough time remaining.
+4. Optionally filter by Binance volume, candle streaks, opening-price movement, and other conditions.
+5. Enter with a capped taker order or use the optional post-only trap mode.
+
+**Historical BTC 15m research card**
+
+- Period: 7 October – 11 November 2026 (about 35 days).
+- Configuration: BTC 15m, taker, tiers around 0.15 and 0.10, streak filter enabled.
+- Signals: about **50** (roughly 1.4 per day).
+- Win rate: about **30%**.
+- Reported total: approximately **+$500** at $10 per signal.
+- Maximum loss streak: **10**.
+- Approximate drawdown at $10 per signal: **−$100**.
+
+Rozi is intentionally a low-win-rate / asymmetric-payoff strategy. Its evaluation should focus on average net payout, losing streaks, drawdown, and the quality of fills — not win rate alone.
 
 ---
 
 ## Quick start
 
-### 1. Requirements
+### Requirements
 
 - Python 3.10+
-- `requests`, `websockets`
-- Live mode: `py_clob_client_v2`
+- `requests`
+- `websockets`
+- `py_clob_client_v2` for live execution
 
-```bash
-pip install requests websockets
-# live:
-pip install py_clob_client_v2
-```
-
-### 2. Polymarket keys (only for `PAPER=false`)
-
-1. Wallet with USDC on Polygon (chain id 137).
-2. Private key → `PK=0x...`
-3. Optional CLOB API keys — leave empty and the client will create/derive them.
-4. If you use Polymarket Proxy / Gnosis Safe — set `FUNDER` and `SIGNATURE_TYPE` (1 or 2).
-
-Docs: [CLOB](https://docs.polymarket.com) · [py-clob-client](https://github.com/Polymarket/py-clob-client)
-
-### 3. Run
+Install the basic dependencies:
 
 ```bash
 git clone https://github.com/govinterset-dotcom/polymarket-algos.git
 cd polymarket-algos
-
-cp comeback/comeback.env.example comeback/comeback.env
-cd comeback && python comeback.py
+pip install -r requirements.txt
 ```
 
-Same for `premove/` and `rozi/`. Config is loaded from `<name>.env` next to the script (or `ENV_FILE=...`).
-
----
-
-## Comeback
-
-**Idea:** side already traded ≤ `MIN_LOW` in the window, then its ask **first** enters `[ENTRY_LO, ENTRY_HI]` after `FRAC_MIN` of the window → buy as taker.
-
-### Performance card (history)
-
-**Comeback, BTC 5m, entry from second 260, price 0.85–0.99**
-
-**Setup:** 5940 five-minute BTC windows over 24 days (13–29 Oct + 2–8 Nov), second-by-second book. Resolution by book/gamma. Taker fee `0.07·p·(1−p)`. Entry at signal ask, no queue/slippage modeled.
-
-| Metric | Value |
-|--------|-------|
-| Entries | 994 (≈41/day), 291 windows |
-| Win rate | 96.9% (95–98%), 31 losses |
-| Result per $1 turnover | +2.8¢ (+1.1…+4.3) |
-| Win per $1 stake | +$0.063 |
-| Loss per $1 stake | −$1.005 |
-| Wins per loss | ~31 (breakeven ~16) |
-| Avg entry price | 0.94 |
-
-**Fixed stake ($ over 24 days):**
-
-| Stake | PnL | Max DD | Worst day |
-|-------|-----|--------|-----------|
-| $5 | +$146 | −$45 | −$17 |
-| $10 | +$293 | −$89 | −$33 |
-| $25 | +$732 | −$223 | −$83 |
-
-In stake units: ~+29, DD 8.9, worst day −3.3. Losing days 6/24. Max loss streak 5, win streak 167.
-
-**By period:** Oct 17d, 42/day, WR 97.9%, +3.9% on turnover; Nov 7d, 40/day, WR 94.2%, ~0%.
-
-**Expect:** ~97 wins per 100 entries. Small edge → one loss wipes ~16 wins. Realistic range 0…+3% on turnover.
-
-**Caveats:** 260s threshold and price band chosen after seeing this data; live ~250ms latency may worsen fill price.
-
-### Key params (`comeback.env`)
-
-| Param | Default | Meaning |
-|-------|---------|--------|
-| `MIN_LOW` | 0.10 | Side was ≤ this mid |
-| `ENTRY_LO` / `ENTRY_HI` | 0.85 / 0.88 | Ask band |
-| `FRAC_MIN` | 0.80 | Not earlier than this fraction |
-| `STAKE_PCT` | 4.0 | % of deposit per trade |
-| `CAP_PX` | 0.90 | Hard taker price cap |
-| `TFS` | 5,15 | Timeframes |
-| `SIGNAL_1S` | false | true = once per second |
-| `SHADOW` | true | Parallel mode journal-only |
-
-See `comeback/comeback.env.example`.
+For live trading, install the CLOB client used by the live implementation:
 
 ```bash
-cd comeback && cp comeback.env.example comeback.env && python comeback.py
+pip install py_clob_client_v2
 ```
 
-Journal: `comeback.jsonl`.
+### Run in paper mode
 
----
+Paper mode is enabled by default. Start with one strategy and inspect its journal before considering live execution.
 
-## Premove (`premove_live`)
-
-**Idea:** in last `JUMP_LAST_S` seconds of a 5m window, Up mid jumps `|Δmid| ≥ JUMP_MIN` over k∈{3,5,10}s → immediately buy **same side** on the **next** 5m market on the pre-open book.
-
-### Performance card (history)
-
-**Premove, BTC 5m, working config (core + chase-15m-extreme filter)**
-
-**Setup:** 24 days, 5940 five-minutes. Book/gamma resolution, fee included. Entry price from real pre-start asks (~0.56 journal, live 0.48–0.61).
-
-| Variant | Signals/day | WR (interval) | Oct / Nov |
-|---------|-------------|---------------|-----------|
-| Core no filters | 9.5 | 62.9% (56–69%) | 61.1% / 67.7% |
-| **Working: + chase filter** | **7.6** | **64.5% (57–71%)** | **62.5% / 70.2%** |
-| Full QF | 4.8 | 64.9% | 63.1% / 70.0% |
-| Working + Down only | 4.0 | 70.5% | 71.8% / 66.7% |
-| Working + jump in 3s | 2.8 | 72.1% | 73.6% / 66.7% |
-
-**Working summary:** 183 signals, 118/65, WR 64.5%, max streaks 12W / 5L. Breakeven entry ≈0.63 (at WR 57% ≈0.55).
-
-**Money ($10/trade, 24 days, after fee):**
-
-| Entry px | On turnover | PnL | Max DD | Worst day | Losing days |
-|----------|-------------|-----|--------|-----------|-------------|
-| 0.50 | +25.5% | +$466 | −$52 | −$12 | 5/23 |
-| **0.55** | **+14.1%** | **+$258** | **−$52** | **−$15** | **6/23** |
-| 0.60 | +4.7% | +$85 | −$54 | −$20 | 9/23 |
-| 0.65 | −3.2% | −$60 | −$111 | −$26 | 13/23 |
-
-**Expect:** 7–8 trades/day, ~2 of 3 win. Keep `CAP_PX` around 0.58–0.60.
-
-**Caveats:** WR interval 57–71%; chase filter tuned on same data; entry price assumption 0.55.
-
-### Key params (`premove_live.env`)
-
-| Param | Default | Meaning |
-|-------|---------|--------|
-| `JUMP_MIN` | 0.40 | Min mid jump |
-| `JUMP_LAST_S` | 25 | Search in last N seconds |
-| `JUMP_KS` | 3,5,10 | Comparison windows |
-| `CAP_PX` | 0.80 | Price cap (consider 0.58–0.60) |
-| `MAX_SLIP` | 0.03 | min(CAP, ask+slip) |
-| `STAKE_PCT` | 2.0 | % of deposit |
-| `SIDES` | Up,Down | Allowed sides |
-| `ENTRY_AFTER_START_S` | 3.0 | Try after target start |
-
+**Comeback**
 ```bash
-cd premove && cp premove_live.env.example premove_live.env && python premove_live.py
+cd comeback
+cp comeback.env.example comeback.env
+python comeback.py
 ```
 
-Journal: `premove_live.jsonl`.
-
----
-
-## Rozi
-
-**Idea:** per side on 15m markets — tiers `level:ref:cap:size`. First touch of mid ≤ level, if mid was ≥ ref over `FAST_S` and enough time left → taker (or trap limit). Optional Binance 5m streak filter.
-
-### Performance card (history)
-
-**Rozi 15m · BTC — card config**
-
-**Config:** BTC 15m, taker, tiers 0.15 / 0.10, streak ≥2 on 5m or 15m (OR), extreme/amp off.
-
-**Run:** 7 Oct – 11 Nov 2026 (~35 days), replay on real books. ~50 signals (~1.4/day). WR ~30%. Avg result ~+$10 per $10 stake. Sum over period at $10/signal ~+$500. Max loss streak 10. DD at $10 ~−$100.
-
-- Tier 0.15: rarer, higher WR (~45%)
-- Tier 0.10: more often, lower WR (~18%), still positive payoff
-
-**Expect:** 1–2 entries/day. Wins < half by design (cheap entry). Streaks of 5–10 losses are normal. BTC only.
-
-**One-liner:** ~30% WR, ~+$10 per $10 risked, ~1.4 entries/day, DD ~10 stakes.
-
-Replay ≠ live: slippage, fees, regime can hurt numbers.
-
-### Key params (`rozi.env`)
-
-| Param | Example | Meaning |
-|-------|---------|--------|
-| `TIERS` | `0.15:0.45:0.17:3,0.10:0.40:0.12:3` | level:ref:cap:size |
-| `FAST_S` | 60 | Fast-drop window |
-| `REM_MIN_FRAC` | 0.33 | Min remaining fraction |
-| `STREAK_FILTER` | on | 5m streak filter |
-| `STREAK_5M_MIN` | 2 | Min consecutive candles |
-| `ENTRY_MODE` | taker | taker or trap |
-| `STAKE_PCT` | 0 | 0 = $ from TIERS; >0 = % deposit |
-| `ADD_USDC` | 0 | Add-on confirmation (0=off) |
-
+**Premove**
 ```bash
-cd rozi && cp rozi.env.example rozi.env && python rozi.py
+cd ../premove
+cp premove_live.env.example premove_live.env
+python premove_live.py
 ```
 
-Journal: `rozi.jsonl`, path log: `rozi_path.jsonl`.
-
----
-
-## Notes
-
-- **Paper vs live:** `PAPER=true` simulates fills at ask; `PAPER=false` needs `PK`.
-- **Compounding:** `COMPOUND=true` → deposit = `DEPOSIT` + journal PnL.
-- **Resolution:** `RESOLVE_BY_BOOK=true` uses last `BOOK_HOLD_S` of winner bid ≥ `BOOK_WIN_PX`, gamma verifies in background.
-- **Never commit real `.env`** — only `*.env.example` are in the repo.
-- Use a dedicated trading wallet with limited balance.
-
-## Structure
-
+**Rozi**
+```bash
+cd ../rozi
+cp rozi.env.example rozi.env
+python rozi.py
 ```
+
+Configuration is loaded from the strategy's `.env` file next to its script, or from the path supplied through `ENV_FILE`.
+
+### Live execution
+
+Live trading requires a Polygon wallet and valid Polymarket CLOB credentials/configuration. The exact signer and funder settings depend on the wallet type.
+
+- Keep `PAPER=true` until the data feed, market selection, order sizing, and journal output have been checked.
+- Never put a private key, API secret, or real `.env` file in Git.
+- Use a dedicated wallet with limited funds.
+- Start with the smallest permitted order size.
+- Check actual fills, fees, partial fills, rejected orders, and resolution records.
+
+The example environment files are templates. Review every parameter before enabling live orders.
+
+## Repository structure
+
+```text
 polymarket-algos/
 ├── README.md
 ├── requirements.txt
@@ -232,6 +201,41 @@ polymarket-algos/
     └── rozi.env.example
 ```
 
-## License / disclaimer
+## Reproducibility and evaluation
 
-Provided as-is. Author is not responsible for financial losses. Prediction-market trading can result in total loss of capital. Historical cards above are not a promise of profit.
+When evaluating or comparing these strategies, record at least:
+
+- dataset dates, market IDs, and timeframes;
+- exact strategy version and full parameter set;
+- signal timestamp and executable bid/ask at decision time;
+- requested price, actual average fill, filled quantity, and rejected quantity;
+- fees and any other execution costs;
+- resolution source and final outcome;
+- PnL, return on turnover, win rate, maximum drawdown, and loss streaks.
+
+Do not compare configurations unless they use the same data period, fee model, entry assumptions, and resolution rules. Parameters selected after inspecting a dataset can overfit that dataset; out-of-sample testing is essential.
+
+## Configuration and journals
+
+Each strategy has its own `.env.example` file with configurable signal, risk, and execution parameters.
+
+- `PAPER=true` is the default.
+- `COMPOUND=true` enables journal-based compounding where supported.
+- JSONL journals record signals, execution events, and resolution information.
+- Rozi can additionally write a path log for order-book analysis.
+
+See the individual strategy source files and example environment files for the full parameter list.
+
+## Contributing
+
+Issues, reproducibility checks, bug reports, and well-documented research ideas are welcome.
+
+When reporting a result, include the strategy version, timeframe, dates, parameters, fee assumptions, and whether the numbers come from historical replay or live fills. Do not post wallet private keys, API secrets, or unredacted account data.
+
+## Disclaimer
+
+This repository is provided for research and educational purposes. It is not investment advice and does not guarantee profit. Prediction-market trading can result in the loss of the entire amount committed. Historical performance and prior live results do not guarantee future outcomes. Real execution can differ because of latency, spread, liquidity, slippage, fees, market changes, and operational failures.
+
+---
+
+**If you find the research useful, consider starring the repository.** Stars help other developers discover the project. If you test a strategy or reproduce a result, please open an issue with your methodology and findings.
