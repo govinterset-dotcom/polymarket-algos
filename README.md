@@ -38,6 +38,14 @@ Most short-term trading examples focus on indicators calculated from exchange ca
 
 The goal is to make the research inspectable: the code, parameters, performance assumptions, and known limitations are documented rather than hidden behind a black-box signal.
 
+## License
+
+This repository is distributed under the **Polymarket Builder Attribution Source-Available License 1.0** (see [LICENSE](LICENSE)).
+
+You may study, run, modify, and redistribute the code under the license terms. For live Polymarket production use, the original Builder attribution must be preserved in the order-submission path unless the copyright holder gives prior written permission. Modified redistributions must retain the license and identify their changes.
+
+This is a custom source-available license, **not an OSI-approved open-source license**. It does not guarantee Builder rewards, attributed volume, or fees; those are governed by Polymarket's current Builder Program rules. Third-party dependencies remain under their own licenses.
+
 ## Polymarket Builder attribution
 
 All three live strategy implementations currently include the same Polymarket Builder attribution configuration:
