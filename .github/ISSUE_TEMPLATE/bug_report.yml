@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a reproducible issue in a strategy or its execution.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include private keys, API secrets, wallet credentials, or unredacted account data.
+  - type: dropdown
+    id: strategy
+    attributes:
+      label: Strategy
+      options:
+        - Comeback
+        - Premove
+        - Rozi
+        - Shared infrastructure
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Execution mode
+      options:
+        - Historical replay
+        - Paper
+        - Live
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Commit or version
+      description: Provide the commit SHA or version, if known.
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Python version, OS, and relevant package versions.
+  - type: textarea
+    id: config
+    attributes:
+      label: Relevant configuration
+      description: Include non-secret settings only. Redact all credentials.
+      render: text
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and sanitized logs
+    validations:
+      required: true
