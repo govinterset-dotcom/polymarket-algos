@@ -1,0 +1,4 @@
+requests>=2.28
+websockets>=11.0
+# для боевого режима (PAPER=false):
+# py_clob_client_v2
