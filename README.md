@@ -204,7 +204,28 @@ Configuration is loaded from the strategy's `.env` file next to its script, or f
 
 ### Live execution
 
-Live trading requires a Polygon wallet and valid Polymarket CLOB credentials/configuration. The exact signer and funder settings depend on the wallet type.
+Live trading requires a Polygon wallet and valid Polymarket CLOB credentials. The **signature type** and **funder** must match how the account was created on Polymarket — this is the most common first-connection failure (401 / rejected orders).
+
+#### `SIGNATURE_TYPE` (`py-clob-client-v2`)
+
+| Value | Name | Typical account |
+|------:|------|-----------------|
+| `-1` | (omit) | Default in examples: do not pass `signature_type` to the client |
+| `0` | EOA | MetaMask / hardware wallet where the private key **is** the address that holds funds |
+| `1` | POLY_PROXY | Older Magic / email login accounts |
+| `2` | POLY_GNOSIS_SAFE | Browser wallet connected through Polymarket's proxy (common MetaMask-on-site flow) |
+| `3` | POLY_1271 | Newer email / Magic / deposit wallets (frequent after 2025–2026) |
+
+Rules of thumb:
+
+- Email or Google login on Polymarket.com → try **`3`**, then **`1`** if orders fail.
+- MetaMask (or similar) connected in the browser on Polymarket.com → usually **`2`**.
+- Pure EOA you fund yourself and trade from directly → **`0`**.
+- For types **1 / 2 / 3**, set `FUNDER` to the wallet address shown in your Polymarket profile (the proxy/deposit address that holds USDC), not necessarily the EOA derived from `PK`.
+
+Wrong `SIGNATURE_TYPE` is the first thing to check if live auth or order posting fails. Defaults in the example env files stay at `-1` so existing setups are not changed; set the value explicitly for your account type.
+
+Other live checklist:
 
 - Keep `PAPER=true` until the data feed, market selection, order sizing, and journal output have been checked.
 - Never put a private key, API secret, or real `.env` file in Git.
