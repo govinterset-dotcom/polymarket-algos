@@ -12,7 +12,7 @@ The strategies are deliberately different: they trade at different frequencies, 
 
 > **Live validation:** The author reports that all three strategies were also tested in live Polymarket market conditions and reproduced their expected research behavior/results. The numerical performance cards below are identified by their stated research/replay methodology; they should not be interpreted as a guarantee of future live returns.
 
-[Repository](https://github.com/govinterset-dotcom/polymarket-algos) · [Polymarket](https://polymarket.com) · [Polymarket Tools Directory](https://polymart.app) · [LaunchPoly](https://launchpoly.com/?ref=Zvh7C4TEHjNHWf2769P6tduJPju58jcq)
+[Repository](https://github.com/govinterset-dotcom/polymarket-algos) · [Polymarket](https://polymarket.com) · [Polymarket Tools Directory](https://polymart.app) · [LaunchPoly](https://launchpoly.com/?ref=Zvh7C4TEHjNHWf2769P6tduJPju58jcq) · [Prediction Market Tools](https://www.predictionmarket.tools/)
 
 <a href="https://launchpoly.com/?ref=Zvh7C4TEHjNHWf2769P6tduJPju58jcq" target="_blank" rel="noopener">
   <img src="https://launchpoly.com/api/badges/claim/Zvh7C4TEHjNHWf2769P6tduJPju58jcq.svg?theme=light&size=medium"
