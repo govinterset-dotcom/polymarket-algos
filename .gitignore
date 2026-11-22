@@ -1,20 +1,20 @@
-# secrets
+.env
 *.env
 !.env.example
 !**/*.env.example
-
-# journals & logs
-*.jsonl
-*.log
-__pycache__/
-*.pyc
-.Python
 .venv/
 venv/
-.env.local
-
-# OS / IDE
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
 .DS_Store
+*.log
+journal/
+data/
+*.parquet
+*.csv
+!requirements.txt
 .idea/
 .vscode/
-*.swp
