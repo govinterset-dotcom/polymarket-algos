@@ -3,102 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Polymarket Algos — Comeback, Premove, Rozi</title>
-  <meta name="description" content="Three research-driven Python strategies for BTC Up/Down markets on Polymarket with historical order-book replay and live CLOB execution." />
+  <title>Polymarket Algos — Multi-year research collection</title>
+  <meta name="description" content="Research-driven Python strategies for Polymarket Up/Down and related markets." />
   <style>
-    :root {
-      --bg: #0b0f14;
-      --card: #121821;
-      --text: #e8eef7;
-      --muted: #9aa8bc;
-      --accent: #3b82f6;
-      --border: #1e293b;
-    }
+    :root { --bg:#0b0f14; --card:#121821; --text:#e8eef7; --muted:#9aa8bc; --accent:#3b82f6; --border:#1e293b; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background: radial-gradient(1200px 600px at 20% -10%, #1a2740 0%, var(--bg) 55%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-    .card {
-      width: 100%;
-      max-width: 640px;
-      background: color-mix(in srgb, var(--card) 92%, transparent);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-    }
-    h1 {
-      margin: 0 0 8px;
-      font-size: 1.55rem;
-      letter-spacing: -0.02em;
-    }
-    p {
-      margin: 0 0 18px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin: 20px 0 8px;
-    }
-    a.btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--accent);
-      color: white;
-      text-decoration: none;
-      padding: 10px 16px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-    a.btn:hover { filter: brightness(1.08); }
-    .meta {
-      margin-top: 22px;
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-    .meta a { color: #93c5fd; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, #1a2740 0%, var(--bg) 55%); color: var(--text); min-height:100vh; padding:32px 16px; }
+    .wrap { max-width: 920px; margin: 0 auto; }
+    h1 { font-size: 1.75rem; margin: 0 0 8px; }
+    p.lead { color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
+    .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+    .card h3 { margin: 0 0 6px; font-size: 1rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
+    .tags { margin-top: 8px; font-size: 0.75rem; color: var(--accent); }
+    a { color: var(--accent); text-decoration: none; }
+    footer { margin-top: 32px; color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
 <body>
-  <main class="card">
+  <div class="wrap">
     <h1>Polymarket Algos</h1>
-    <p>
-      Three research-driven Python strategies for BTC Up/Down markets on Polymarket
-      — Comeback, Premove and Rozi — with historical order-book replay, live CLOB execution,
-      and documented performance.
-    </p>
-
-    <div class="badges">
-      <a href="https://launchpoly.com/?ref=G9y17ypw6xODkmKzfE2h3iZewQNmsTCK" target="_blank" rel="noopener" data-launchpoly="G9y17ypw6xODkmKzfE2h3iZewQNmsTCK">
-        <img src="https://launchpoly.com/api/badges/claim/G9y17ypw6xODkmKzfE2h3iZewQNmsTCK.svg?theme=light&size=medium"
-             alt="Featured on LaunchPoly" width="150" height="44" />
-      </a>
+    <p class="lead">Multi-year collection of research strategies for Polymarket microstructure. Source on <a href="https://github.com/govinterset-dotcom/polymarket-algos">GitHub</a>.</p>
+    <div class="grid">
+      <div class="card"><h3>Comeback</h3><p>Late recovery of a nearly-lost side.</p><div class="tags">5m · late · high WR</div></div>
+      <div class="card"><h3>Premove</h3><p>Late book jump → next window.</p><div class="tags">5m · transition</div></div>
+      <div class="card"><h3>Rozi</h3><p>Sharp drops into price tiers.</p><div class="tags">15m · tiers</div></div>
+      <div class="card"><h3>Gozi / Dozi / Closer</h3><p>Impulse and late-tail entries.</p><div class="tags">impulse · closer</div></div>
+      <div class="card"><h3>Boxarb / Arb / Spread</h3><p>Nested and cross-asset arbitrage.</p><div class="tags">arbitrage</div></div>
+      <div class="card"><h3>Flash / Crossreb / Chainlink</h3><p>CEX flash, rebound, oracle lag.</p><div class="tags">signal</div></div>
+      <div class="card"><h3>Dispute / Autotaker</h3><p>UMA dispute and feed-driven takes.</p><div class="tags">uma · feeds</div></div>
+      <div class="card"><h3>Merge Split</h3><p>CTF merge &amp; split (redeem-adjacent).</p><div class="tags">ctf</div></div>
+      <div class="card"><h3>Grids / Slots / Hour / Mart</h3><p>Grids, slots, series, martingale.</p><div class="tags">grid · slots</div></div>
+      <div class="card"><h3>Reward Farmer + research</h3><p>Rewards and specialized modules.</p><div class="tags">research</div></div>
     </div>
-
-    <p style="margin-top: 8px;">
-      <a class="btn" href="https://github.com/govinterset-dotcom/polymarket-algos">View on GitHub →</a>
-    </p>
-
-    <div class="meta">
-      Also listed on
-      <a href="https://polymart.app">PolyMart</a>
-      · Source & docs on
-      <a href="https://github.com/govinterset-dotcom/polymarket-algos">GitHub</a>
-    </div>
-  </main>
+    <footer>Builder attribution embedded. Not financial advice.</footer>
+  </div>
 </body>
 </html>
