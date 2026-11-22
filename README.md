@@ -1,43 +1,86 @@
-# Polymarket Up/Down Trading Algorithms
+# Polymarket Algorithms
 
-**A multi-year collection of research-driven Python strategies for Polymarket — order-book, disputes, grids, oracles, slots, and more.**
+A curated collection of **research and production-oriented** Python strategies for [Polymarket](https://polymarket.com) — CLOB trading, CTF merge/redeem, UMA disputes, grids, oracles, and cross-venue signals.
 
-Years of experiments and iterations. Strategies differ in frequency, payoff profile, and source of edge.
+Built over multiple years of iteration on live books, historical windows, and fee-aware execution.
 
-### Core
+---
 
-- **Comeback** — late recovery of a nearly-lost side
-- **Premove** — late book jump → next window
-- **Rozi** — sharp drops into price tiers
+## Structure
 
-### Extended collection
+Each strategy lives in its own folder:
+
+```
+strategy_name/
+  strategy_name.py      # main module (Builder attribution embedded)
+  README.md             # essence + tags
+  strategy_name.env.example
+```
+
+Core live modules (preserved as-is):
+
+| Module | Role |
+|--------|------|
+| **comeback** | Late recovery of a nearly-lost side |
+| **premove** | Late book jump → next window |
+| **rozi** | Sharp drops into price tiers |
+
+---
+
+## Extended collection
 
 | Folder | Essence | Tags |
 |--------|---------|------|
-| **gozi / dozi** | Late / early strong impulse + volume progression | impulse, volume |
-| **boxarb** | Nested 5m/15m/4h box arbitrage | arbitrage, nested |
-| **flash** | CEX flash → Polymarket | cross-exchange |
-| **closer** | Buy the leading side in the last seconds | tail, closer |
-| **crossreb** | CROSS + rebound from deep low (15m) | cross, rebound |
-| **streakbot** | Outcome series + tail confirm | streak |
-| **arb_bot** | Classic Up+Down combination arb | arbitrage |
-| **hitday** | Daily hit-price ladders vs Binance | daily, ladder |
-| **pmgrid / preladder** | Limit grids (live / pre-open) | grid, limit |
-| **dispute_ladder / dispute_cheap** | Post-UMA disputant strategies | uma, dispute |
-| **autotaker** | Feed-driven auto-take on ProposePrice | feeds, tennis, esports |
-| **merge_split** | CTF split & merge via proxy wallet | ctf, merge |
-| **chainlink_edge** | Direct Chainlink lag vs book | oracle |
-| **slotbot / martbot / hourbot** | Slots, martingale after losses, hourly series | slots, series |
-| **spread_arb_bot** | Up-BTC vs Up-ETH spread | spread, btc-eth |
-| **reward_farmer** | Liquidity / reward farming | rewards |
-| **btc_impulse_v4** | Impulse variant | impulse |
-| **polymoly / propwatch / secunda / tennischeck / udogq** | Experimental / specialized | research |
+| **gozi** | Late strong impulse in the final ~30s of BTC 5m; limit + volume cycle | `impulse` `late-window` `5m` |
+| **dozi** | Companion impulse; taker + volume filters | `impulse` `taker` |
+| **flash** | CEX flash (Binance/OKX) → Polymarket Up/Down | `flash` `cross-exchange` |
+| **closer** | Buy the leading side in the last seconds of the window | `closer` `tail` |
+| **boxarb** | Nested 5m/15m/4h box arbitrage | `arbitrage` `nested` |
+| **streakbot** | Outcome streak + tail confirmation | `streak` `series` |
+| **arb_bot** | Classic Up+Down combination arb after fees | `arbitrage` `spread` |
+| **hitday** | Daily hit-price ladders vs CEX | `daily` `ladder` |
+| **pmgrid** / **preladder** | Limit grids (live / pre-open) | `grid` `limit` |
+| **crossreb** | CROSS + rebound on 15m | `cross` `rebound` |
+| **dispute_ladder** / **dispute_cheap** | Post-UMA disputant strategies | `uma` `dispute` |
+| **autotaker** | Feed-driven take on ProposePrice | `feeds` `uma` |
+| **merge_split** | CTF split / merge / **redeem** via proxy wallet | `ctf` `redeem` |
+| **chainlink_edge** | Chainlink lag vs book | `oracle` |
+| **slotbot** / **martbot** / **hourbot** | Slots, martingale, hourly series | `slots` `series` |
+| **spread_arb_bot** | Up-BTC vs Up-ETH spread | `spread` `btc-eth` |
+| **reward_farmer** | Liquidity / reward farming | `rewards` |
+| **btc_impulse_v4** | Impulse research variant | `impulse` `btc` |
+| **udogq** / **secunda** / **propwatch** / **tennischeck** / **polymoly** | Specialized / experimental | `research` |
 
-Builder address/code is embedded in live CLOB paths. **No private keys or funders in the repo** — only empty `.env.example`.
+---
+
+## Builder attribution
+
+Live CLOB paths embed:
+
+```python
+BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
+BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
+```
+
+These are **not** read from `.env`. Private keys and funder addresses are **never** committed — only empty `*.env.example` files.
+
+---
+
+## Quick start
+
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+cd gozi
+cp gozi.env.example .env
+# edit .env — set PAPER=true for dry runs
+python gozi.py
+```
 
 > Paper and historical figures are not guarantees of future live returns.
 
-[GitHub](https://github.com/govinterset-dotcom/polymarket-algos) · [Polymarket](https://polymarket.com)
+---
 
 ## License
 
