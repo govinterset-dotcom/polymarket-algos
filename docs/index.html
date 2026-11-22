@@ -1,43 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Polymarket Algos — Multi-year research collection</title>
-  <meta name="description" content="Research-driven Python strategies for Polymarket Up/Down and related markets." />
+  <title>Polymarket Algorithms</title>
+  <meta name="description" content="Multi-year research collection of Polymarket CLOB strategies." />
   <style>
-    :root { --bg:#0b0f14; --card:#121821; --text:#e8eef7; --muted:#9aa8bc; --accent:#3b82f6; --border:#1e293b; }
+    :root { --bg:#0b0f14; --card:#121820; --text:#e7eef7; --muted:#8b9bb0; --accent:#5b9cff; --line:#1e2836; }
     * { box-sizing: border-box; }
-    body { margin:0; font-family: ui-sans-serif, system-ui, sans-serif; background: radial-gradient(1200px 600px at 20% -10%, #1a2740 0%, var(--bg) 55%); color: var(--text); min-height:100vh; padding:32px 16px; }
-    .wrap { max-width: 920px; margin: 0 auto; }
-    h1 { font-size: 1.75rem; margin: 0 0 8px; }
-    p.lead { color: var(--muted); margin: 0 0 24px; line-height: 1.5; }
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+           background: var(--bg); color: var(--text); line-height:1.55; }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 48px 20px 80px; }
+    h1 { font-size: 1.9rem; letter-spacing: -0.02em; margin: 0 0 8px; }
+    .sub { color: var(--muted); margin-bottom: 28px; }
     .grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
-    .card h3 { margin: 0 0 6px; font-size: 1rem; }
-    .card p { margin: 0; color: var(--muted); font-size: 0.85rem; line-height: 1.4; }
-    .tags { margin-top: 8px; font-size: 0.75rem; color: var(--accent); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+    .card h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .card p { margin: 0; color: var(--muted); font-size: 0.92rem; }
+    .tags { margin-top: 8px; }
+    .tag { display:inline-block; font-size: 0.72rem; color: var(--accent); border: 1px solid #2a3b55;
+           border-radius: 999px; padding: 2px 8px; margin: 2px 4px 0 0; }
     a { color: var(--accent); text-decoration: none; }
-    footer { margin-top: 32px; color: var(--muted); font-size: 0.8rem; }
+    a:hover { text-decoration: underline; }
+    footer { margin-top: 36px; color: var(--muted); font-size: 0.85rem; }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1>Polymarket Algos</h1>
-    <p class="lead">Multi-year collection of research strategies for Polymarket microstructure. Source on <a href="https://github.com/govinterset-dotcom/polymarket-algos">GitHub</a>.</p>
+    <h1>Polymarket Algorithms</h1>
+    <p class="sub">Multi-year research collection — CLOB strategies, CTF, disputes, grids, oracles. Source on <a href="https://github.com/govinterset-dotcom/polymarket-algos">GitHub</a>.</p>
     <div class="grid">
-      <div class="card"><h3>Comeback</h3><p>Late recovery of a nearly-lost side.</p><div class="tags">5m · late · high WR</div></div>
-      <div class="card"><h3>Premove</h3><p>Late book jump → next window.</p><div class="tags">5m · transition</div></div>
-      <div class="card"><h3>Rozi</h3><p>Sharp drops into price tiers.</p><div class="tags">15m · tiers</div></div>
-      <div class="card"><h3>Gozi / Dozi / Closer</h3><p>Impulse and late-tail entries.</p><div class="tags">impulse · closer</div></div>
-      <div class="card"><h3>Boxarb / Arb / Spread</h3><p>Nested and cross-asset arbitrage.</p><div class="tags">arbitrage</div></div>
-      <div class="card"><h3>Flash / Crossreb / Chainlink</h3><p>CEX flash, rebound, oracle lag.</p><div class="tags">signal</div></div>
-      <div class="card"><h3>Dispute / Autotaker</h3><p>UMA dispute and feed-driven takes.</p><div class="tags">uma · feeds</div></div>
-      <div class="card"><h3>Merge Split</h3><p>CTF merge &amp; split (redeem-adjacent).</p><div class="tags">ctf</div></div>
-      <div class="card"><h3>Grids / Slots / Hour / Mart</h3><p>Grids, slots, series, martingale.</p><div class="tags">grid · slots</div></div>
-      <div class="card"><h3>Reward Farmer + research</h3><p>Rewards and specialized modules.</p><div class="tags">research</div></div>
+      <div class="card"><h3>comeback · premove · rozi</h3><p>Core live modules: recovery, premove, tier drops.</p><div class="tags"><span class="tag">core</span></div></div>
+      <div class="card"><h3>gozi · dozi · flash · closer</h3><p>Impulse, CEX flash proxy, late-window closer.</p><div class="tags"><span class="tag">impulse</span><span class="tag">flash</span><span class="tag">tail</span></div></div>
+      <div class="card"><h3>boxarb · arb_bot · spread_arb_bot</h3><p>Nested and classic combination / cross-asset arb.</p><div class="tags"><span class="tag">arbitrage</span></div></div>
+      <div class="card"><h3>dispute_* · autotaker · tennischeck</h3><p>UMA dispute ladders and feed-driven takes.</p><div class="tags"><span class="tag">uma</span><span class="tag">feeds</span></div></div>
+      <div class="card"><h3>merge_split</h3><p>CTF split, merge, and redeem via proxy wallet.</p><div class="tags"><span class="tag">ctf</span><span class="tag">redeem</span></div></div>
+      <div class="card"><h3>pmgrid · preladder · slotbot · martbot · hourbot</h3><p>Grids, slots, martingale, hourly series.</p><div class="tags"><span class="tag">grid</span><span class="tag">slots</span></div></div>
     </div>
-    <footer>Builder attribution embedded. Not financial advice.</footer>
+    <footer>Builder attribution embedded in sources · No private keys in repo · Not financial advice</footer>
   </div>
 </body>
 </html>
