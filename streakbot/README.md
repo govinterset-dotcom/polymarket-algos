@@ -1,7 +1,9 @@
-# Streakbot — Outcome Series
+# streakbot
 
-**Tags:** `streak` · `series` · `mean-reversion` · `tail-confirm` · `taker`
+**Tags:** `streak · series · tail-confirm`
 
-Fades or follows runs of identical Up/Down outcomes. Arms near the end of a signalling window when the book shows a strong favourite, then takes according to configured streak rules and confirmation polls.
+Outcome series: arm near window end, take with confirmation.
 
-Builder attribution embedded.
+Main file: `streakbot.py`
+
+Copy `.env.example` → `.env`. Builder embedded in source.

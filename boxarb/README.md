@@ -1,7 +1,9 @@
-# Boxarb — Nested Up/Down Box Arbitrage
+# boxarb
 
-**Tags:** `arbitrage` · `nested-markets` · `5m-15m-4h` · `chainlink-twap` · `fak`
+**Tags:** `arbitrage · nested · fak`
 
-Exploits pricing inconsistencies across nested BTC Up/Down windows (5m / 15m / 4h) that resolve on the same Chainlink TWAP stream. Simultaneously buys the cheap side of the box with FAK orders when the implied combination is mispriced.
+Nested 5m/15m/4h box arbitrage on the same Chainlink TWAP stream.
 
-Builder attribution embedded.
+Main file: `boxarb.py`
+
+Copy `.env.example` → `.env`. Builder embedded in source.

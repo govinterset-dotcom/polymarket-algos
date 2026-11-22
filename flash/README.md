@@ -1,7 +1,9 @@
-# Flash — Cross-Exchange Flash Move
+# flash
 
-**Tags:** `flash` · `cross-exchange` · `binance-okx` · `latency` · `taker`
+**Tags:** `flash · cross-exchange`
 
-Detects sharp BTC/ETH/XRP/SOL moves on Binance + OKX websockets and uses them as a proxy signal for the corresponding Polymarket Up/Down market.
+CEX (Binance+OKX) flash moves as proxy signal for Polymarket Up/Down.
 
-Builder attribution embedded.
+Main file: `flash.py`
+
+Copy `.env.example` → `.env`. Builder embedded in source.

@@ -1,7 +1,9 @@
-# Dozi
+# dozi
 
-**Tags:** `impulse` · `taker` · `volume-filter`
+**Tags:** `impulse · taker · volume`
 
-Dozi — early / companion late-impulse family. Taker entries on book dynamics with volume and timing filters.
+Companion impulse family; taker entries with volume and timing filters.
 
-Builder attribution (same address/code as the rest of the collection) is embedded in the live path. Secrets stay in `.env` only — never committed.
+Main file: `dozi.py`
+
+Copy `.env.example` → `.env`. Builder embedded in source.

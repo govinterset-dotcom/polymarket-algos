@@ -1,7 +1,9 @@
-# Gozi — Late Strong Impulse
+# gozi
 
-**Tags:** `impulse` · `late-window` · `5m` · `volume-progression` · `limit`
+**Tags:** `impulse · late-window · 5m`
 
-Catches a strong mid-price impulse in the final ~30 seconds of a BTC Up/Down 5-minute market: the side started cheap, then jumped hard. Places a limit buy only when the ask is still elevated. Includes a volume-progression cycle after accepted fills.
+Late strong impulse in the final ~30s of BTC 5m Up/Down; limit entry + volume progression.
 
-Builder attribution embedded.
+Main file: `gozi.py`
+
+Copy `.env.example` → `.env` and fill credentials for live mode. Builder address/code is embedded in the source (not via env).
