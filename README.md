@@ -1,84 +1,74 @@
 # Polymarket Algorithms
 
-A curated collection of **research and production-oriented** Python strategies for [Polymarket](https://polymarket.com) — CLOB trading, CTF merge/redeem, UMA disputes, grids, oracles, and cross-venue signals.
+Open research workspace for **Polymarket** short-horizon markets (BTC/ETH up-down 5m / 15m): live-style Python bots, fee-aware backtests, and **historical datasets** (order-book paths + Binance seconds).
 
-Built over multiple years of iteration on live books, historical windows, and fee-aware execution.
+The goal is simple: anyone — researchers, traders, or **AI agents** — can clone the repo, load the data, and test or invent strategies without reinventing market plumbing.
 
----
-
-## Structure
-
-Each strategy lives in its own folder:
-
-```
-strategy_name/
-  strategy_name.py      # main module (Builder attribution embedded)
-  README.md             # essence + tags
-  strategy_name.env.example
-```
-
-Core live modules (preserved as-is):
-
-| Module | Role |
-|--------|------|
-| **comeback** | Late recovery of a nearly-lost side |
-| **premove** | Late book jump → next window |
-| **rozi** | Sharp drops into price tiers |
+> Paper / historical results are **not** guarantees of live performance. Fees (taker + optional builder) matter.
 
 ---
 
-## Extended collection
+## Layout
 
-| Folder | Essence | Tags |
-|--------|---------|------|
-| **gozi** | Late strong impulse in the final ~30s of BTC 5m; limit + volume cycle | `impulse` `late-window` `5m` |
-| **dozi** | Companion impulse; taker + volume filters | `impulse` `taker` |
-| **flash** | CEX flash (Binance/OKX) → Polymarket Up/Down | `flash` `cross-exchange` |
-| **closer** | Buy the leading side in the last seconds of the window | `closer` `tail` |
-| **boxarb** | Nested 5m/15m/4h box arbitrage | `arbitrage` `nested` |
-| **streakbot** | Outcome streak + tail confirmation | `streak` `series` |
-| **arb_bot** | Classic Up+Down combination arb after fees | `arbitrage` `spread` |
-| **hitday** | Daily hit-price ladders vs CEX | `daily` `ladder` |
-| **pmgrid** / **preladder** | Limit grids (live / pre-open) | `grid` `limit` |
-| **crossreb** | CROSS + rebound on 15m | `cross` `rebound` |
-| **dispute_ladder** / **dispute_cheap** | Post-UMA disputant strategies | `uma` `dispute` |
-| **autotaker** | Feed-driven take on ProposePrice | `feeds` `uma` |
-| **merge_split** | CTF split / merge / **redeem** via proxy wallet | `ctf` `redeem` |
-| **chainlink_edge** | Chainlink lag vs book | `oracle` |
-| **slotbot** / **martbot** / **hourbot** | Slots, martingale, hourly series | `slots` `series` |
-| **spread_arb_bot** | Up-BTC vs Up-ETH spread | `spread` `btc-eth` |
-| **reward_farmer** | Liquidity / reward farming | `rewards` |
-| **btc_impulse_v4** | Impulse research variant | `impulse` `btc` |
-| **udogq** / **secunda** / **propwatch** / **tennischeck** / **polymoly** | Specialized / experimental | `research` |
+```
+polymarket-algos/
+  algorithms/          # strategy code + env examples (research set)
+  datasets/            # historical data + schema docs (updated over time)
+  <legacy folders>/    # older one-folder-per-bot layout still present at repo root
+  README.md
+  LICENSE
+```
+
+| Path | Purpose |
+|------|---------|
+| **[algorithms/](algorithms/)** | Runnable bots used in recent research (comeback, rozi, ineff, crossreb, …) |
+| **[datasets/](datasets/)** | Path JSONL (per-second book) and BTC seconds parquet; **data will grow and improve** |
+| Root strategy folders | Historical collection (gozi, flash, boxarb, …) — same license |
 
 ---
 
-## Builder attribution
+## For humans and AI agents
 
-Live CLOB paths embed:
+You can use this repo to:
 
-```python
-BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
-BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
+1. **Backtest** a rule on real 5m/15m windows (winner + bid/ask path).
+2. **Join** book paths with Binance second bars for spot–book edge studies.
+3. **Compare** strategies under the same fee model (taker ≈ `0.07 × p × (1−p)` per share, optional builder % on notional).
+4. **Iterate with an AI agent**: point the agent at `datasets/README.md` + a bot folder, ask for a grid search, fold stability, or a new signal class.
+
+Suggested agent prompt skeleton:
+
+```text
+Load datasets/README.md and algorithms/<name>.
+Replay BTC 5m/15m path JSONL with fee+builder.
+Report n, WR, ROI, max loss streak, and 3 time folds.
+Do not claim live profitability from paper alone.
 ```
-
-These are **not** read from `.env`. Private keys and funder addresses are **never** committed — only empty `*.env.example` files.
 
 ---
 
 ## Quick start
 
 ```bash
+git clone https://github.com/govinterset-dotcom/polymarket-algos.git
+cd polymarket-algos
 python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt  # requests websockets py-clob-client pyarrow pandas ...
 
-cd gozi
-cp gozi.env.example .env
-# edit .env — set PAPER=true for dry runs
-python gozi.py
+# Paper-run a research bot
+cd algorithms
+cp comeback.env.example comeback.env
+# edit PAPER=true
+python comeback.py
 ```
 
-> Paper and historical figures are not guarantees of future live returns.
+Datasets: see **[datasets/README.md](datasets/README.md)**. Large binaries may ship via **Git LFS** or **Release assets** as the archive grows.
+
+---
+
+## Builder attribution
+
+Live CLOB paths may embed builder codes in source. Private keys and funders are **never** committed — only `*.env.example`.
 
 ---
 
