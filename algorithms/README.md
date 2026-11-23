@@ -1,24 +1,27 @@
 # Algorithms (research set)
 
-Canonical copies of strategies used in recent path / seconds analysis.
+Strategies used with the shared **path / seconds** datasets. Full sources currently live in **root-level folders** (legacy layout); this directory holds the research index, env examples, and is the target place for unified copies.
 
-| File | Role | TF focus |
-|------|------|----------|
-| `comeback.py` + `comeback.env.example` | Point-in-time leader / underdog pockets on BTC 5m (heatmap-filtered rules) | 5m |
-| `rozi.py` + `rozi.env.example` | Tier drop / recovery taker (H1-style configs in env) | 15m |
-| `ineff.py` + `ineff.env.example` | Residual edge / spot lead / false dump vs fair Φ model | 15m |
-| `crossreb.py` + `crossreb.env.example` | Book **cross** threshold + **rebound** (1 trade/window recommended) | 15m |
-| `preladder.py` | Pre-window / ladder limit experiments | research |
-| `doppler.py` | Companion research module | research |
+| Research name | Code in repo | Env example | TF |
+|---------------|--------------|-------------|-----|
+| **comeback** | [`../comeback/comeback.py`](../comeback/comeback.py) | [`comeback.env.example`](comeback.env.example) (also under `comeback/`) | 5m leader/underdog pockets |
+| **rozi** | [`../rozi/`](../rozi/) (if present) / research dumps | [`rozi.env.example`](rozi.env.example) | 15m tier drops |
+| **ineff** | add under `algorithms/ineff.py` when synced | [`ineff.env.example`](ineff.env.example) | 15m edge / lead / false dump |
+| **crossreb** | [`crossreb.env.example`](crossreb.env.example) + source to sync | cross + rebound, **1 trade/window** | 15m |
+| **preladder** | [`../preladder/`](../preladder/) | research | limits / ladder |
+| **doppler** | research companion | — | — |
+
+Root folders (`gozi`, `flash`, `boxarb`, …) stay as the broad production/research collection.
 
 ### Conventions
 
-- Config via `ENV_FILE=...` or `<name>.env` next to the script.
-- `PAPER=true` by default in examples — no orders.
-- Journals: `*.jsonl` events (`signal`, `fill`, `resolved`).
-- Compounding and stake floors follow each bot’s env (`DEPOSIT`, `STAKE_PCT`, `MIN_SHARES`).
+- `PAPER=true` for dry runs; never commit real `.env` / keys.
+- Evaluate with **taker + optional builder** fees (see `datasets/README.md`).
+- Replay against `datasets/paths/*.jsonl` and `datasets/seconds/*.parquet`.
 
-### Notes
+### AI-agent workflow
 
-- Root-level folders (e.g. `comeback/`, `rozi/`) remain for the broader historical collection.
-- Prefer **this** `algorithms/` tree for reproducibility against `datasets/`.
+1. Read `datasets/README.md` + this file.
+2. Load path JSONL (longest record per `slug`).
+3. Implement or call a signal rule; report n, WR, ROI, folds, max loss streak.
+4. Do not treat paper ROI as live edge.
