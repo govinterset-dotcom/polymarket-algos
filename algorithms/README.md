@@ -1,27 +1,34 @@
 # Algorithms (research set)
 
-Each strategy has **code + env example**. Prefer running from this folder with `ENV_FILE=...`.
+## What is in git right now
 
-| Entry | Source of truth | Env |
-|-------|-----------------|-----|
-| `comeback.py` | [`../comeback/comeback.py`](../comeback/comeback.py) (wrapper) | `comeback.env.example` / `../comeback/comeback.env.example` |
-| `rozi.py` | [`../rozi/rozi.py`](../rozi/rozi.py) (wrapper) | `rozi.env.example` |
-| `preladder.py` | [`../preladder/preladder.py`](../preladder/preladder.py) (wrapper) | `../preladder/preladder.env.example` |
-| `crossreb.py` | **full source in this folder** | `crossreb.env.example` |
-| `ineff.py` | **full source in this folder** | `ineff.env.example` |
-| `doppler.py` | **full source in this folder** (when present) | — |
+| File | Status |
+|------|--------|
+| `comeback.py` | **Wrapper** → full code in [`../comeback/comeback.py`](../comeback/comeback.py) |
+| `rozi.py` | **Wrapper** → full code in [`../rozi/rozi.py`](../rozi/rozi.py) |
+| `preladder.py` | **Wrapper** → full code in [`../preladder/preladder.py`](../preladder/preladder.py) |
+| `crossreb.py` | Loader stub — needs full `crossreb.py` from **algorithms_src.zip** |
+| `ineff.py` | **Missing** — add from **algorithms_src.zip** |
+| `doppler.py` | **Missing** — add from **algorithms_src.zip** |
+| `*.env.example` | Present for crossreb / ineff / rozi / comeback |
+
+**Root folders** (`gozi`, `flash`, `comeback`, `rozi`, `boxarb`, …): each already has its own `*.py` (not env-only).
+
+### One-shot: drop full research sources into this folder
+
+```bash
+# put algorithms_src.zip in repo root, then:
+unzip -o algorithms_src.zip -d algorithms/
+```
+
+That unpacks full `crossreb.py`, `ineff.py`, `doppler.py`, `comeback.py`, `rozi.py`, `preladder.py` + env examples.
 
 ### Run
 
 ```bash
 cd algorithms
-cp crossreb.env.example crossreb.env   # edit PAPER=true
-python3 crossreb.py
-
-cp ../comeback/comeback.env.example comeback.env
-python3 comeback.py
+cp ../comeback/comeback.env.example comeback.env && python3 comeback.py
+cp crossreb.env.example crossreb.env && python3 crossreb.py
 ```
 
-Root folders (`gozi`, `flash`, `boxarb`, …) remain the broader collection — each still has its own `*.py`.
-
-Replay research against `../datasets/` (path zip + seconds).
+Use `PAPER=true`. Datasets: `../datasets/`.
