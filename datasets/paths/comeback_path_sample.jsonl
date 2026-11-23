@@ -1,1 +1,3 @@
-PLACEHOLDER
+# This path was a placeholder.
+# Full path JSONL files are too large for the agent→GitHub API channel.
+# Publish them with the one-shot script in datasets/UPLOAD.md (Git LFS or Release).
