@@ -26,6 +26,8 @@ COMPOUND=true — депозит = DEPOSIT + итог закрытых сдел�
 Нужны: requests, websockets; для боя — py_clob_client_v2.
 """
 from __future__ import annotations
+BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
+BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
 
 import asyncio
 import json
@@ -398,8 +400,6 @@ def _num(d: dict, *keys) -> Optional[float]:
 
 # ----------------------------------------------------------------------------- builder (gozi)
 # Зашито в коде, из .env не читается: параметры менять можно, атрибуцию ордеров — нет.
-BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
-BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
 
 class Clob:
     """Покупка FAK через py_clob_client_v2. Ничего не отменяет (FAK не висит в книге)."""
