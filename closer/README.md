@@ -1,9 +1,5 @@
 # closer
 
-**Tags:** `closer · tail · late-entry`
+**Late-window closer**
 
-Buy the side already leading in the last ~3.5s of the window.
-
-Main file: `closer.py`
-
-Copy `.env.example` → `.env`. Builder embedded in source.
+In the final seconds, buys the side that is already clearly leading (high bid).

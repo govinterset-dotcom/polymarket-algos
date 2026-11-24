@@ -1,7 +1,5 @@
-# Udogq
+# udogq
 
-**Tags:** `underdog` · `quotes-only` · `sigma`
+**Underdog quote / research**
 
-Udogq — underdog signal from naked quotes only (distance from strike vs remaining time × sigma).
-
-Builder attribution embedded. Secrets stay in `.env` only.
+Quotes or takes underdog side under specific conditions.

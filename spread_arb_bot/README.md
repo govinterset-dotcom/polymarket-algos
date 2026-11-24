@@ -1,7 +1,5 @@
-# Spread Arb Bot
+# spread_arb_bot
 
-**Tags:** `spread` · `btc-eth` · `cross-asset`
+**BTC vs ETH up-side spread**
 
-Spread Arb — monitor Up-BTC vs Up-ETH on the same live window (5m & 15m) and capture the cross-asset spread.
-
-Builder attribution embedded. Secrets stay in `.env` only.
+Trades relative pricing between BTC-Up and ETH-Up when the spread diverges.

@@ -1,7 +1,9 @@
-# Slotbot
+# slotbot
 
-**Tags:** `slots` · `hourly` · `tail-resolve`
+**Slot / scheduled series bot**
 
-Slotbot — stable hourly (and similar) slots on Up/Down; early tail resolution + order hygiene.
+Trades fixed time slots or scheduled series of windows with predefined size schedule and filters.
 
-Builder attribution embedded. Secrets stay in `.env` only.
+```bash
+cd slotbot && cp slotbot.env.example slotbot.env && python slotbot.py
+```

@@ -1,7 +1,9 @@
-# Martbot
+# martbot
 
-**Tags:** `martingale` · `slots` · `after-losses`
+**Martingale-style series bot**
 
-Martbot — selected slots after two losses in a row; taker with size doubling up to three attempts.
+High variance step-up sizing after losses on short-horizon up-down markets. Bankroll and max-step caps are critical. Prefer long paper runs first.
 
-Builder attribution embedded. Secrets stay in `.env` only.
+```bash
+cd martbot && cp martbot.env.example martbot.env && python martbot.py
+```

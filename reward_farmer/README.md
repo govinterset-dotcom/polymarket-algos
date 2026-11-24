@@ -1,5 +1,5 @@
-# Reward Farmer
+# reward_farmer
 
-**Tags:** `rewards` · `farming` · `liquidity`
+**Liquidity / reward farming**
 
-Farm liquidity/reward programs on slower Polymarket markets.
+Two-sided resident limits near mid on Up and Down to farm liquidity rewards and maker rebates. Not directional.

@@ -1,7 +1,5 @@
-# Pmgrid
+# pmgrid
 
-**Tags:** `grid` · `limit` · `planner` · `updown`
+**Limit grid (live)**
 
-Pmgrid — limit-order grid on Polymarket Up/Down (CLOB v2). One-file planner + live placement.
-
-Builder attribution (same address/code as the rest of the collection) is embedded in the live path. Secrets stay in `.env` only — never committed.
+Bidirectional limit grids near mid for maker rebates / liquidity rewards.

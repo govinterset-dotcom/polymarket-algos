@@ -1,5 +1,9 @@
-# Autotaker
+# autotaker
 
-**Tags:** `uma` · `feeds` · `tennis` · `esports` · `autotake`
+**Feed-driven taker on ProposePrice**
 
-Auto-buy future disputant side from external feeds (tennis/football/esports) on ProposePrice.
+Takes when oracle/feed proposes a price that leaves an edge on the book. Aggressive taker path.
+
+```bash
+cd autotaker && cp autotaker.env.example autotaker.env && python autotaker.py
+```

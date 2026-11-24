@@ -1,7 +1,5 @@
-# Hitday
+# hitday
 
-**Tags:** `daily` · `hit-price` · `ladder` · `binance`
+**Daily hit-price ladders vs CEX**
 
-Hitday — daily «What price will BTC/ETH hit?» ladder markets vs Binance 1m highs/lows.
-
-Builder attribution (same address/code as the rest of the collection) is embedded in the live path. Secrets stay in `.env` only — never committed.
+Builds daily hit-price ladders comparing Polymarket levels to CEX reference.

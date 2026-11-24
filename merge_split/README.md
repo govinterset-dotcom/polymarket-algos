@@ -1,5 +1,5 @@
-# Merge Split
+# merge_split
 
-**Tags:** `ctf` · `merge` · `split` · `proxy-wallet`
+**CTF split / merge / redeem**
 
-Direct CTF split & merge via Polymarket proxy wallet (self-paid gas). Closest module to position cleanup / redeem-adjacent flows.
+Helper for Conditional Token Framework: split, merge complete sets, redeem winners via proxy wallet.

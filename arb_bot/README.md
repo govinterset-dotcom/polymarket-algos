@@ -1,7 +1,5 @@
-# Arb Bot — Classic Up/Down Arbitrage
+# arb_bot
 
-**Tags:** `arbitrage` · `up-down` · `spread` · `maker-taker`
+**Classic Up+Down combination arb**
 
-Classic Polymarket BTC Up/Down arbitrage: monitors both sides of the book and captures locked or near-locked combinations when Up + Down prices leave edge after fees.
-
-Builder constants present; older py_clob_client path may need a one-line BuilderConfig wire if the installed client supports it.
+When Up ask + Down ask < 1 − fees, buys both legs (full-set arb after taker fees).
