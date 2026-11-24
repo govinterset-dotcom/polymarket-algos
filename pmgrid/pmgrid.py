@@ -46,7 +46,10 @@ def discover_btc() -> List[dict]:
 class Clob:
     def __init__(self):
         self.client = None
-        if PAPER or not PK: return
+        if PAPER:
+            return
+        if not PK:
+            raise SystemExit("LIVE mode requires PRIVATE_KEY; refusing to continue without Builder-attributed CLOB client")
         try:
             from py_clob_client_v2.client import ClobClient
             from py_clob_client_v2.clob_types import ApiCreds
@@ -58,9 +61,10 @@ class Clob:
             if os.environ.get("CLOB_API_KEY"):
                 self.client.set_api_creds(ApiCreds(api_key=os.environ["CLOB_API_KEY"], api_secret=os.environ["CLOB_API_SECRET"], api_passphrase=os.environ["CLOB_API_PASSPHRASE"]))
             else:
-                self.client.set_api_creds(self.client.create_or_derive_api_creds())
+                self.client.set_api_creds(self.client.create_or_derive_api_key())
         except Exception as e:
             log.error("clob: %s", e)
+            raise SystemExit("LIVE CLOB initialization failed; refusing to run without Builder attribution")
 
     def limit_buy(self, token_id: str, price: float, size: float):
         if PAPER or not self.client:
