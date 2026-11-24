@@ -76,11 +76,8 @@ class Clob:
             kw = {"host": CLOB, "key": PK, "chain_id": 137, "signature_type": SIGNATURE_TYPE}
             if FUNDER:
                 kw["funder"] = FUNDER
-            try:
                 from py_clob_client_v2.client import BuilderConfig
                 kw["builder_config"] = BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
-            except Exception:
-                pass
             self.client = ClobClient(**kw)
             if os.environ.get("CLOB_API_KEY"):
                 self.client.set_api_creds(ApiCreds(
