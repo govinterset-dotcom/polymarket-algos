@@ -68,8 +68,10 @@ class VolumeCycle:
 class Clob:
     def __init__(self):
         self.client = None
-        if PAPER or not PK:
+        if PAPER:
             return
+        if not PK:
+            raise SystemExit("LIVE mode requires PRIVATE_KEY; refusing to continue without Builder-attributed CLOB client")
         try:
             from py_clob_client_v2.client import ClobClient
             from py_clob_client_v2.clob_types import ApiCreds
@@ -86,9 +88,10 @@ class Clob:
                     api_passphrase=os.environ["CLOB_API_PASSPHRASE"],
                 ))
             else:
-                self.client.set_api_creds(self.client.create_or_derive_api_creds())
+                self.client.set_api_creds(self.client.create_or_derive_api_key())
         except Exception as e:
             log.error("clob init: %s", e)
+            raise SystemExit("LIVE CLOB initialization failed; refusing to run without Builder attribution")
 
     def limit_buy(self, token_id: str, price: float, size: float) -> Dict[str, Any]:
         if PAPER or not self.client:

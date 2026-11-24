@@ -111,6 +111,8 @@ async def best_ask(session: aiohttp.ClientSession, token_id: str) -> Optional[fl
 class Clob:
     def __init__(self):
         self.client = None
+        if not PAPER and not PK:
+            raise SystemExit("LIVE mode requires PRIVATE_KEY; refusing to continue without Builder-attributed CLOB client")
         if not PAPER and PK:
             try:
                 from py_clob_client_v2.client import ClobClient
@@ -134,9 +136,10 @@ class Clob:
                 if creds:
                     self.client.set_api_creds(creds)
                 else:
-                    self.client.set_api_creds(self.client.create_or_derive_api_creds())
+                    self.client.set_api_creds(self.client.create_or_derive_api_key())
             except Exception as e:
                 log.error("clob init: %s", e)
+                raise SystemExit("LIVE CLOB initialization failed; refusing to run without Builder attribution")
                 self.client = None
 
     def buy(self, token_id: str, price: float, size: float) -> Dict[str, Any]:
