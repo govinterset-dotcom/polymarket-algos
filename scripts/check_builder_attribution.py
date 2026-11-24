@@ -44,6 +44,11 @@ for relative in LIVE_CLOB_FILES:
     if not re.search(r"(?:ClobClient|m\.ClobClient)\(\*\*kw\)", source):
         errors.append(f"{relative}: CLOB client is not constructed from configured kwargs")
 
+    if "create_or_derive_api_creds(" in source:
+        errors.append(f"{relative}: obsolete v1 API credential method remains")
+    if "create_or_derive_api_key(" not in source:
+        errors.append(f"{relative}: missing v2 create_or_derive_api_key()")
+
 if errors:
     print("\n".join(errors), file=sys.stderr)
     raise SystemExit(1)
