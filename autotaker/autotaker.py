@@ -32,10 +32,8 @@ class Clob:
             from py_clob_client_v2.clob_types import ApiCreds
             kw = {"host": CLOB, "key": PK, "chain_id": 137, "signature_type": SIGNATURE_TYPE}
             if FUNDER: kw["funder"] = FUNDER
-            try:
-                from py_clob_client_v2.client import BuilderConfig
-                kw["builder_config"] = BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
-            except Exception: pass
+            from py_clob_client_v2.client import BuilderConfig
+            kw["builder_config"] = BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
             self.client = ClobClient(**kw)
             if os.environ.get("CLOB_API_KEY"):
                 self.client.set_api_creds(ApiCreds(api_key=os.environ["CLOB_API_KEY"], api_secret=os.environ["CLOB_API_SECRET"], api_passphrase=os.environ["CLOB_API_PASSPHRASE"]))
