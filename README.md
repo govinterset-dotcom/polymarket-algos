@@ -29,6 +29,46 @@ polymarket-algos/
 
 ---
 
+## Best paper results (research bots on repo data)
+
+Offline replays on archives under **[datasets/](datasets/)** (order-book paths ± BTC seconds). Fee model: taker ≈ `0.07 × p × (1−p)` per share + ~1% builder. Fixed stake in tables. **Not live performance.**
+
+### Strongest cuts we measured
+
+| Algorithm / slice | Data | n | WR | ROI (fees in) | Notes |
+|-------------------|------|---|-----|---------------|--------|
+| **ineff — lead only** (spot move ≥0.2% in 5m + residual edge, ask &lt; 0.60) | BTC 15m paths ∩ seconds (~14.7d overlap) | **75** | **~56%** | **~+30%** | Best single slice; max loss streak ~4 |
+| **ineff — lead + false_dump** | same | **185** | **~37%** | **~+10%** | false_dump alone was weak / negative |
+| **crossreb-style** (cross ~0.70 / ask ≤ 0.80, 1 trade / window) | path research cuts | moderate n | mid–high WR | small **+** when filtered | Needs fold re-check; raw unfiltered cross on full path ≈ **−3…−5%** |
+| **rozi** (book dump tiers, e.g. soft streak filters) | 15m paths | often small n | ~30–45% in tight grids | **fragile** | Edge sensitive to window length / FAST_S; weekly decay in one study |
+| **comeback** (underdog / pocket rules) | 5m+15m paths | varies | zone-dependent | mixed | Some frac zones (e.g. late window) looked toxic — filter, don’t blanket |
+
+**Takeaway:** the **clearest paper plus** in our runs was **ineff lead** on path+spot, not raw mid/ask thresholds. Unfiltered path-only rules (cheap leader, underdog, open corridor) on full BTC 5m/15m paths were typically **−3% to −7% ROI after fees** at high n — useful as baselines, not as deploy configs.
+
+### Path-only baselines (full BTC dumps, high frequency)
+
+| Rule (sketch) | TF | n (order) | WR | ROI after fees |
+|---------------|----|-----------|-----|----------------|
+| Cross ~0.70, ask ≤ 0.80 | 15m / 5m | ~2.8k / ~5.9k | ~73–74% | **−3% to −5%** |
+| Cheap leader ask ∈ [0.55, 0.70] | 15m / 5m | ~2.7k / ~5.5k | ~61–63% | **−5% to −7%** |
+| Underdog ask ∈ [0.25, 0.40] | 15m / 5m | ~2.7k / ~5.4k | ~32–33% | **−5% to −7%** |
+| Corridor ask ∈ [0.30, 0.45] | 15m / 5m | ~2.8k / ~5.9k | ~38% | **~−5%** |
+
+### How to push results further
+
+Signals can be **improved and cleaned with filters** — that is the intended use of this repo:
+
+- price corridor and **max ask**;
+- **frac of window** (avoid open and final seconds);
+- **one entry per reason / side**;
+- skip **true dumps** (book + fair both extreme);
+- require **spot lead** or residual edge where seconds exist;
+- report **3 time folds**, max loss streak, trades/day — not only headline WR.
+
+Reproduce, tighten, or refute on the same `datasets/`; PRs and issues with grids are welcome. Do not treat any row above as a finished live strategy.
+
+---
+
 ## For humans and AI agents
 
 You can use this repo to:
@@ -68,32 +108,6 @@ Datasets: see **[datasets/README.md](datasets/README.md)**. Large binaries may s
 
 ---
 
-## Paper replays on `datasets/` (informative, not a live claim)
-
-Several signal classes were **replayed offline** on the path archives in this repository (BTC 5m / 15m order-book paths from `datasets/paths/`, fee model taker + ~1% builder, fixed stake). Numbers below are **paper / historical** only: they show that the data is usable for research and that **raw unfiltered rules are usually thin or negative after fees**. Positive pockets appear when signals are combined with spot lead, price corridors, or stricter filters — and those edges need independent re-checks on time folds and out-of-sample windows.
-
-**Illustrative path-only baselines (BTC, fill at ask, fees in):**
-
-| Rule (sketch) | TF | n (order) | WR (order) | ROI after fees |
-|---------------|----|-----------|------------|----------------|
-| Mid/ask “cross” ~0.70, ask ≤ 0.80 | 15m / 5m | high thousands | ~73–74% | about **−3% to −5%** |
-| Cheap leader ask ∈ [0.55, 0.70] | 15m / 5m | high thousands | ~61–63% | about **−5% to −7%** |
-| Underdog ask ∈ [0.25, 0.40] | 15m / 5m | high thousands | ~32–33% | about **−5% to −7%** |
-| Edge-style corridor ask ∈ [0.30, 0.45] | 15m / 5m | high thousands | ~38% | about **−5%** |
-
-**With spot + book (ineff-style lead / false_dump on overlapping BTC seconds + 15m paths):** lead-only was the stronger slice in one research cut (higher WR, shorter loss streaks); false_dump alone was weaker; **time folds were uneven** — treat as a hypothesis to re-run, not a finished product.
-
-**What this is for:** the repo ships **real windows + outcomes** so anyone can verify, reject, or improve these rules. You are invited to:
-
-- tighten **filters** (frac of window, max ask, one entry per reason/side, skip true dumps);
-- add **spot / σ / residual fair** where seconds data exists;
-- test **stability across folds** and assets (ETH dumps under `datasets/paths/`);
-- clean signals rather than stack uncorrelated noise.
-
-Directions that often matter more than a single headline WR: fee-aware ROI, max loss streak, trades per day, and whether the edge survives a later calendar slice. Pull requests and issues that reproduce a grid on `datasets/` are welcome.
-
----
-
 ## Builder attribution
 
 Live CLOB paths may embed builder codes in source. Private keys and funders are **never** committed — only `*.env.example`.
@@ -103,6 +117,7 @@ Live CLOB paths may embed builder codes in source. Private keys and funders are 
 ## License
 
 Polymarket Builder Attribution Source-Available License 1.0 — see [LICENSE](LICENSE).
+
 ## Additional July 2026 pre-TWAP order-book and trade archive
 
 Four BTC/ETH archives were added under [datasets/paths/](datasets/paths/). They contain **2,567 unique market windows** across 5m and 15m markets, covering July 6–19, 2026 (before the August 7, 2026 switch to 60-second TWAP resolution). Counts, archive contents, field definitions, and research caveats are documented in [datasets/README.md](datasets/README.md) and [datasets/paths/SOURCE.md](datasets/paths/SOURCE.md).
