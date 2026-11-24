@@ -68,6 +68,32 @@ Datasets: see **[datasets/README.md](datasets/README.md)**. Large binaries may s
 
 ---
 
+## Paper replays on `datasets/` (informative, not a live claim)
+
+Several signal classes were **replayed offline** on the path archives in this repository (BTC 5m / 15m order-book paths from `datasets/paths/`, fee model taker + ~1% builder, fixed stake). Numbers below are **paper / historical** only: they show that the data is usable for research and that **raw unfiltered rules are usually thin or negative after fees**. Positive pockets appear when signals are combined with spot lead, price corridors, or stricter filters — and those edges need independent re-checks on time folds and out-of-sample windows.
+
+**Illustrative path-only baselines (BTC, fill at ask, fees in):**
+
+| Rule (sketch) | TF | n (order) | WR (order) | ROI after fees |
+|---------------|----|-----------|------------|----------------|
+| Mid/ask “cross” ~0.70, ask ≤ 0.80 | 15m / 5m | high thousands | ~73–74% | about **−3% to −5%** |
+| Cheap leader ask ∈ [0.55, 0.70] | 15m / 5m | high thousands | ~61–63% | about **−5% to −7%** |
+| Underdog ask ∈ [0.25, 0.40] | 15m / 5m | high thousands | ~32–33% | about **−5% to −7%** |
+| Edge-style corridor ask ∈ [0.30, 0.45] | 15m / 5m | high thousands | ~38% | about **−5%** |
+
+**With spot + book (ineff-style lead / false_dump on overlapping BTC seconds + 15m paths):** lead-only was the stronger slice in one research cut (higher WR, shorter loss streaks); false_dump alone was weaker; **time folds were uneven** — treat as a hypothesis to re-run, not a finished product.
+
+**What this is for:** the repo ships **real windows + outcomes** so anyone can verify, reject, or improve these rules. You are invited to:
+
+- tighten **filters** (frac of window, max ask, one entry per reason/side, skip true dumps);
+- add **spot / σ / residual fair** where seconds data exists;
+- test **stability across folds** and assets (ETH dumps under `datasets/paths/`);
+- clean signals rather than stack uncorrelated noise.
+
+Directions that often matter more than a single headline WR: fee-aware ROI, max loss streak, trades per day, and whether the edge survives a later calendar slice. Pull requests and issues that reproduce a grid on `datasets/` are welcome.
+
+---
+
 ## Builder attribution
 
 Live CLOB paths may embed builder codes in source. Private keys and funders are **never** committed — only `*.env.example`.
