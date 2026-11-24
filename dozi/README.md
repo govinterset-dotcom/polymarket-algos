@@ -1,9 +1,29 @@
 # dozi
 
-**Tags:** `impulse · taker · volume`
+**Companion / early impulse**
 
-Companion impulse family; taker entries with volume and timing filters.
+## Strategy
 
-Main file: `dozi.py`
+Related impulse family with taker entries and volume filters. Monitors book early–mid window and takes when delta and volume conditions align. Designed as a companion to gozi-style late impulses.
 
-Copy `.env.example` → `.env`. Builder embedded in source.
+## Files
+
+| File | Role |
+|------|------|
+| `dozi.py` | Full strategy source |
+| `dozi.env.example` | Config template — copy to `dozi.env` |
+
+## Quick start
+
+```bash
+cd dozi
+cp dozi.env.example dozi.env
+# edit PAPER=true and keys if needed
+python dozi.py
+```
+
+Paper mode is the default. Live trading requires `PRIVATE_KEY` and explicit disable of paper flags.
+
+## License
+
+Same as repository root (Polymarket Builder Attribution Source-Available License 1.0).
