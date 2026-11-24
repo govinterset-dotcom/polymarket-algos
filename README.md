@@ -25,6 +25,8 @@ polymarket-algos/
 | **[datasets/](datasets/)** | Path JSONL (per-second book) and BTC seconds parquet; **data will grow and improve** |
 | Root strategy folders | Historical collection (gozi, flash, boxarb, …) — same license |
 
+**Datasets coverage (path):** unique markets (windows) **~12 600** — of which **BTC 5m ≈ 7 000**, **BTC 15m ≈ 3 200** (plus ETH/SOL/XRP in some dumps). See [datasets/](datasets/).
+
 ---
 
 ## For humans and AI agents

@@ -4,6 +4,13 @@ Historical **Polymarket up/down** windows and **Binance BTC** second bars used f
 
 **Status:** living archive — coverage, assets, and quality will be **updated and improved** over time. Check `MANIFEST.md` for file list and hashes when present.
 
+### Coverage (path archive)
+
+Unique markets (windows) in **path**: **~12 600**  
+Of which **BTC 5m ≈ 7 000**, **BTC 15m ≈ 3 200** (plus ETH/SOL/XRP in some dumps).
+
+Main bulk download: [`paths/path.zip`](paths/path.zip).
+
 ---
 
 ## 1. Order-book paths (`paths/`)

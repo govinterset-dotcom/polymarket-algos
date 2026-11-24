@@ -2,6 +2,11 @@
 
 Files collected for path + seconds research. Publish into `datasets/paths/` and `datasets/seconds/` (or GitHub Release assets) as storage allows.
 
+### Coverage (path)
+
+Unique markets (windows) in **path**: **~12 600**  
+Of which **BTC 5m ≈ 7 000**, **BTC 15m ≈ 3 200** (plus ETH/SOL/XRP in some dumps).
+
 | size (bytes) | sha256-16 | file |
 |-------------:|-----------|------|
 | 42413983 | e7d0c53298e9ec0f | btc_seconds_2026-10-01_2026-10-27.parquet |

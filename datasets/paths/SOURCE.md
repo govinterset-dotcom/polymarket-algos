@@ -2,6 +2,11 @@
 
 Preferred bulk package: **`path.zip`** (~7.5 MB compressed, ~85 MB uncompressed).
 
+### Coverage
+
+Unique markets (windows) in **path**: **~12 600**  
+Of which **BTC 5m ≈ 7 000**, **BTC 15m ≈ 3 200** (plus ETH/SOL/XRP in some dumps).
+
 Contents (JSONL order-book paths):
 
 | File in zip | Notes |
