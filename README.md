@@ -77,3 +77,8 @@ Live CLOB paths may embed builder codes in source. Private keys and funders are 
 ## License
 
 Polymarket Builder Attribution Source-Available License 1.0 — see [LICENSE](LICENSE).
+## Additional July 2026 pre-TWAP order-book and trade archive
+
+Four BTC/ETH archives were added under [datasets/paths/](datasets/paths/). They contain **2,567 unique market windows** across 5m and 15m markets, covering July 6–19, 2026 (before the August 7, 2026 switch to 60-second TWAP resolution). Counts, archive contents, field definitions, and research caveats are documented in [datasets/README.md](datasets/README.md) and [datasets/paths/SOURCE.md](datasets/paths/SOURCE.md).
+
+These July 2026 markets belong to the pre-TWAP resolution regime; do not assume their outcome behavior transfers directly to the post-switch regime.
