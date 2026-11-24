@@ -30,3 +30,15 @@ Of which **BTC 5m ≈ 7 000**, **BTC 15m ≈ 3 200** (plus ETH/SOL/XRP in so
 Deduplicate by hash before publishing. Prefer `rozi15s_path-3.jsonl` as the longest 15m path set when available.
 
 **Upload note:** binaries are too large for casual API commits; use `git lfs` or a GitHub **Release** named e.g. `datasets-2026-11` and keep this manifest in sync.
+### Additional July 2026 pre-TWAP archive
+
+The following four ZIP archives were added under `datasets/paths/`. Market counts and descriptive statistics are documented in [`datasets/README.md`](README.md) and [`datasets/paths/SOURCE.md`](paths/SOURCE.md).
+
+| size (bytes) | file | markets | timeframe / asset |
+|-------------:|------|--------:|-------------------|
+| 14,481,382 | `btc_5m__.zip` | 809 | BTC 5m |
+| 9,176,404 | `btc_15m__.zip` | 679 | BTC 15m |
+| 6,363,011 | `eth_5m__.zip` | 809 | ETH 5m |
+| 10,088,732 | `eth_15m.zip` | 270 | ETH 15m |
+
+**Total: 2,567 markets** (1,618 5m and 949 15m), July 6–19, 2026. All four datasets predate the August 7, 2026 switch to 60-second TWAP resolution. The nested `eth_5m__.zip` inside `eth_15m.zip` is byte-for-byte identical to the separately listed `eth_5m__.zip` and is a duplicate, not additional coverage.
