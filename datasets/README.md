@@ -122,3 +122,56 @@ def load_paths(dirpath, tf="15m", asset_prefix="btc"):
 import pyarrow.parquet as pq
 t = pq.read_table("datasets/seconds/btc_seconds_....parquet", columns=["ts_sec", "close"])
 ```
+---
+
+## 7. Additional July 2026 BTC/ETH archive (pre-TWAP)
+
+Four archives were added to [`paths/`](paths/). According to the archive inventory, they contain **2,567 markets** in total. These are July 2026 markets collected before the switch to 60-second TWAP resolution on August 7, 2026.
+
+### Market coverage
+
+| Dataset | Markets | Period (UTC) | Window coverage | Up / Down |
+|---|---:|---|---:|---:|
+| BTC 5m | 809 | Jul 6 00:00 – Jul 8 22:55 (3.0 days) | 809 / 851 (95%) | 391 / 418 |
+| BTC 15m | 679 | Jul 6 00:00 – Jul 19 23:50 (14.0 days) | 679 / 1,344 (51%) | 327 / 352 |
+| ETH 5m | 809 | Jul 6 00:00 – Jul 8 22:55 (3.0 days) | 809 / 851 (95%) | 391 / 418 |
+| ETH 15m | 270 | Jul 6 00:00 – Jul 8 22:50 (3.0 days) | 270 / 284 (95%) | 133 / 137 |
+
+By timeframe: **1,618 5m markets** (809 BTC + 809 ETH) and **949 15m markets** (679 BTC + 270 ETH). The 2,567 figure is the sum of the four asset/timeframe datasets; BTC and ETH windows are separate market records. BTC and ETH outcomes for corresponding windows agree in approximately 86–87% of cases, so they should not be treated as identical outcomes.
+
+| Archive | Compressed size |
+|---|---:|
+| `btc_5m__.zip` | 14,481,382 bytes |
+| `btc_15m__.zip` | 9,176,404 bytes |
+| `eth_5m__.zip` | 6,363,011 bytes |
+| `eth_15m.zip` | 10,088,732 bytes |
+
+**Nested duplicate:** `eth_15m.zip` also contains `eth_5m__.zip`; that nested file is byte-for-byte identical to the separately published `eth_5m__.zip`. Do not count it as an additional dataset or additional markets.
+
+### Archive structure and schemas
+
+Each asset/timeframe dataset contains three data files:
+
+- **`*_meta.json`** — market inventory and metadata: `window_start` (Unix seconds), `coin`, `tf`, `slug`, `market` (market address), `era` (all records are `v2`), `winner` (`Up` or `Down`), `asset_ids` (Up and Down token IDs), `tick_changes`, and `n_src_rows`.
+- **`*_top.parquet`** — best bid/ask snapshots as the order book changes. Columns: `window_start`, `ts` (milliseconds), `up` (true = Up token, false = Down token), `bid`, `ask`. **Prices are stored in thousandths**: divide by 1,000 (e.g. 460 = 0.460; encoded range 0–1,000).
+- **`*_trades.parquet`** — trade records. Columns: `window_start`, `ts`, `ts_recv` (receive timestamp), `up`, `px` (price in thousandths), `sz` (size in micro-units; 60,000,000 = 60 shares), `buy`, and `fee_bps`. Divide `px` by 1,000 and `sz` by 1,000,000 for human/share units.
+
+### Data volume
+
+| Dataset | Top-of-book rows | Trades | Median top rows / market | Median trades / market |
+|---|---:|---:|---:|---:|
+| BTC 5m | 1.42 million | 1.99 million | 1,537 | 2,325 |
+| BTC 15m | 1.57 million | 0.79 million | 2,048 | 1,101 |
+| ETH 5m | 1.33 million | 0.41 million | 1,517 | 485 |
+| ETH 15m | 1.28 million | 0.12 million | 4,297 | 422 |
+
+For BTC 5m, top-of-book rows are almost evenly split between Up and Down tokens (707,764 and 707,878 rows respectively), so both token books are represented.
+
+### Interpretation and caveats
+
+- **Pre-TWAP regime:** all four datasets are from July 2026, before the August 7 switch to 60-second TWAP resolution. Resolution behavior and market outcomes in this archive may differ from the current regime; do not transfer backtest conclusions to post-switch markets without a separate test.
+- **Pre-window quotes:** 100% of BTC 5m markets have quotes before the window start (median 24 rows); the data also contains a median/observed 4 rows after the window end as reported in the archive analysis. This permits pre-open behavior analysis not available in the `rozi5_path` paths.
+- **Use `winner` from metadata as the resolved outcome:** the final book agrees with metadata `winner` in 97.3% of BTC 5m, 98.2% of BTC 15m, 97.5% of ETH 5m, and 99.6% of ETH 15m markets. Remaining cases may have a book that did not converge to 0/1 or truncated data.
+- **Coverage is uneven:** BTC 15m contains 679 of 1,344 possible windows (51%) over its 14-day span; the other three datasets cover approximately 95% of their stated windows.
+- **Cross-asset dependence:** corresponding BTC and ETH window outcomes agree in about 86–87% of cases, not 100%. Identical Up/Down counts in BTC 5m and ETH 5m (391/418) do not mean the individual outcomes are identical.
+- The row counts and descriptive statistics above are the supplied archive inventory; inspect the parquet/meta files when exact per-record validation or a different deduplication rule is required.
