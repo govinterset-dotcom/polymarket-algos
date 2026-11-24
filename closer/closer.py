@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
-BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
 
 """
 closer.py
@@ -11,6 +9,8 @@ Buy the side already leading on Polymarket in the last FIRE_BEFORE_SEC (~3.5s)
 of each 5m/15m window. No CEX cross — only Polymarket book time/price.
 """
 from __future__ import annotations
+BUILDER_ADDRESS = "0xd61e22734b257afc0710f6b530a0abc244eac34f"
+BUILDER_CODE = "0xcd125f8d13ec24d28c7f5f0d7f1809dcf1ce83d3125a17738dbae34508117ede"
 
 import os
 import time
@@ -121,16 +121,8 @@ class Clob:
                 kw = {"host": host, "key": PK, "chain_id": chain_id, "signature_type": SIGNATURE_TYPE}
                 if FUNDER:
                     kw["funder"] = FUNDER
-                try:
-                    from py_clob_client_v2.client import BuilderConfig
-                    kw["builder_config"] = BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
-                except Exception:
-                    try:
-                        import py_clob_client_v2.client as m
-                        if hasattr(m, "BuilderConfig"):
-                            kw["builder_config"] = m.BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
-                    except Exception:
-                        pass
+                from py_clob_client_v2.client import BuilderConfig
+                kw["builder_config"] = BuilderConfig(builder_address=BUILDER_ADDRESS, builder_code=BUILDER_CODE)
                 self.client = ClobClient(**kw)
                 creds = None
                 if os.environ.get("CLOB_API_KEY"):
