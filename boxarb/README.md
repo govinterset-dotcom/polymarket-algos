@@ -1,9 +1,19 @@
 # boxarb
 
-**Tags:** `arbitrage · nested · fak`
+**Nested 5m / 15m / 4h box arbitrage**
 
-Nested 5m/15m/4h box arbitrage on the same Chainlink TWAP stream.
+## Strategy
 
-Main file: `boxarb.py`
+Looks for pricing inconsistencies across nested BTC/ETH up-down windows (5m inside 15m inside 4h). When a combination of legs is mispriced relative to the outer window after fees, buys the cheap box.
 
-Copy `.env.example` → `.env`. Builder embedded in source.
+## Quick start
+
+```bash
+cd boxarb
+cp boxarb.env.example boxarb.env
+python boxarb.py
+```
+
+## License
+
+Same as repository root.
