@@ -39,7 +39,7 @@ for relative in LIVE_CLOB_FILES:
             errors.append(f"{relative}: missing {marker}")
 
     # Ensure the SDK's builder config is passed to the CLOB client constructor.
-    if not re.search(r"builder_config\s*\]\s*=\s*(?:m\.)?BuilderConfig\(", source):
+    if not re.search(r"builder_config[\"\']?\s*\]\s*=\s*(?:m\.)?BuilderConfig\(", source):
         errors.append(f"{relative}: BuilderConfig is not assigned to client kwargs")
     if not re.search(r"(?:ClobClient|m\.ClobClient)\(\*\*kw\)", source):
         errors.append(f"{relative}: CLOB client is not constructed from configured kwargs")
