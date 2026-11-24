@@ -1,0 +1,19 @@
+name: Python and Builder checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile every tracked Python source
+        run: python -m compileall -q .
+      - name: Verify Builder attribution on live CLOB algorithms
+        run: python scripts/check_builder_attribution.py
