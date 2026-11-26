@@ -8,10 +8,19 @@ The goal is simple: anyone — researchers, traders, or **AI agents** — can cl
 
 ---
 
+## Best live algorithms
+
+Curated signals that held up on **path backtests and multi-day paper** (not the full research zoo). See **[best-live-algos/](best-live-algos/)**.
+
+- **[mojo](best-live-algos/mojo/)** — BTC 5m **leader at 25% of the window, ask ≥ 0.95** (`leader_25_095_100` only). Path: n≈208, WR≈99%, all weeks green, ~6 trades/day; paper 23–26 Nov: 39/39 wins. Small edge after fees — high-WR “crumbs”, not high ROI.
+
+---
+
 ## Layout
 
 ```
 polymarket-algos/
+  best-live-algos/     # curated live-oriented signals (mojo, …)
   algorithms/          # strategy code + env examples (research set)
   datasets/            # historical data + schema docs (updated over time)
   <legacy folders>/    # older one-folder-per-bot layout still present at repo root
@@ -21,6 +30,7 @@ polymarket-algos/
 
 | Path | Purpose |
 |------|---------|
+| **[best-live-algos/](best-live-algos/)** | Shortlist with path + paper notes |
 | **[algorithms/](algorithms/)** | Runnable bots used in recent research (comeback, rozi, ineff, crossreb, …) |
 | **[datasets/](datasets/)** | Path JSONL (per-second book) and BTC seconds parquet; **data will grow and improve** |
 | Root strategy folders | Historical collection (gozi, flash, boxarb, …) — same license |
@@ -44,10 +54,11 @@ Offline replays on archives under **[datasets/](datasets/)** (order-book paths �
 | **crossreb — both** | same | ~3894 | ~73% | **~−2.8%** | Cross drag dominates rebound |
 | **rozi** (book dump tiers, e.g. soft streak filters) | 15m paths | often small n | ~30–45% in tight grids | **fragile** | Edge sensitive to window length / FAST_S; weekly decay |
 | **comeback** (underdog / pocket rules) | 5m+15m paths | varies | zone-dependent | mixed | Some frac zones toxic — filter |
+| **mojo / leader_25** | BTC 5m path | **208** | **~99%** | small + after fees | Isolated leader ask≥0.95 @25%; paper 39/39 |
 
 **crossreb detail:** on the full BTC 15m path archive, **rebound-only** stayed near flat-to-slightly-positive after fees (~+1.4% ROI, ~20 trades/day). Default **cross** alone is negative (~−4%) at high n — the older docstring “+2.5%” does **not** reproduce on this dump. Prefer `ENABLE_CROSS=false` + rebound defaults for paper follow-ups, then re-check folds.
 
-**Takeaway:** the **clearest paper plus** was **ineff lead** on path+spot. Unfiltered path-only rules on full BTC 5m/15m paths were typically **−3% to −7% ROI after fees** at high n.
+**Takeaway:** the **clearest paper plus** was **ineff lead** on path+spot. Unfiltered path-only rules on full BTC 5m/15m paths were typically **−3% to −7% ROI after fees** at high n. **mojo** is the opposite profile: very high WR, tiny $ edge.
 
 ### Other 5m / 15m bots (potential + path checks)
 
@@ -105,6 +116,14 @@ pip install -r requirements.txt
 cd algorithms
 cp comeback.env.example comeback.env   # PAPER=true
 python comeback.py
+```
+
+Or the curated live shortlist:
+
+```bash
+cd best-live-algos/mojo
+cp mojo.env.example mojo.env
+python mojo.py   # after adding mojo.py if not yet in tree
 ```
 
 Datasets: **[datasets/README.md](datasets/README.md)**.
