@@ -1,5 +1,7 @@
 # Polymarket Algorithms
 
+[![Featured on LaunchPoly](https://launchpoly.com/api/badges/polymarket-algos?size=medium&theme=light)](https://launchpoly.com/tools/polymarket-algos?ref=badge)
+
 Open research workspace for **Polymarket** short-horizon markets (BTC/ETH up-down 5m / 15m): live-style Python bots, fee-aware backtests, and **historical datasets** (order-book paths + Binance seconds).
 
 The goal is simple: anyone — researchers, traders, or **AI agents** — can clone the repo, load the data, and test or invent strategies without reinventing market plumbing.
