@@ -1,6 +1,12 @@
 # Polymarket Algorithms
 
+<a href="https://launchpoly.com/tools/polymarket-algos?ref=badge" target="_blank" rel="noopener">
+  <img src="https://launchpoly.com/api/badges/polymarket-algos?size=medium&theme=light" alt="polymarket-algos — Featured on LaunchPoly" width="150" height="44" />
+</a>
+
 [![Featured on LaunchPoly](https://launchpoly.com/api/badges/polymarket-algos?size=medium&theme=light)](https://launchpoly.com/tools/polymarket-algos?ref=badge)
+
+<!-- LaunchPoly badge (verifier): https://launchpoly.com/api/badges/polymarket-algos -->
 
 Open research workspace for **Polymarket** short-horizon markets (BTC/ETH up-down 5m / 15m): live-style Python bots, fee-aware backtests, and **historical datasets** (order-book paths + Binance seconds).
 
