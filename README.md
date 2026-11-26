@@ -10,9 +10,10 @@ The goal is simple: anyone — researchers, traders, or **AI agents** — can cl
 
 ## Best live algorithms
 
-Curated signals that held up on **path backtests and multi-day paper** (not the full research zoo). See **[best-live-algos/](best-live-algos/)**.
+Curated signals that held up on **path backtests** (and where available, paper). See **[best-live-algos/](best-live-algos/)**.
 
 - **[mojo](best-live-algos/mojo/)** — BTC 5m **leader at 25% of the window, ask ≥ 0.95** (`leader_25_095_100` only). Path: n≈208, WR≈99%, all weeks green, ~6 trades/day; paper 23–26 Nov: 39/39 wins. Small edge after fees — high-WR “crumbs”, not high ROI.
+- **[path_z](best-live-algos/path_z/)** — BTC 5m/15m **role + Binance residual-z**. Live core: `15m_U_fav_20/25/40` + `5m_L_vs_35/40`. Path: U_fav block ~+$243 (n≈1.3k, low WR); L_vs_35/40 ~+$135 (WR≈84%). Paper (~21h, wider set) net negative until L_vs_25/30 and multi-stack are disabled; U_fav alone stayed green.
 
 ---
 
@@ -20,7 +21,7 @@ Curated signals that held up on **path backtests and multi-day paper** (not the 
 
 ```
 polymarket-algos/
-  best-live-algos/     # curated live-oriented signals (mojo, …)
+  best-live-algos/     # curated live-oriented signals (mojo, path_z, …)
   algorithms/          # strategy code + env examples (research set)
   datasets/            # historical data + schema docs (updated over time)
   <legacy folders>/    # older one-folder-per-bot layout still present at repo root
@@ -55,10 +56,12 @@ Offline replays on archives under **[datasets/](datasets/)** (order-book paths �
 | **rozi** (book dump tiers, e.g. soft streak filters) | 15m paths | often small n | ~30–45% in tight grids | **fragile** | Edge sensitive to window length / FAST_S; weekly decay |
 | **comeback** (underdog / pocket rules) | 5m+15m paths | varies | zone-dependent | mixed | Some frac zones toxic — filter |
 | **mojo / leader_25** | BTC 5m path | **208** | **~99%** | small + after fees | Isolated leader ask≥0.95 @25%; paper 39/39 |
+| **path_z U_fav core** | path ∩ seconds | ~1.3k | ~26% | positive $ sum | Payoff-driven underdog + fav z |
+| **path_z L_vs 35/40** | path ∩ seconds | ~1.5k | ~84% | small + | Thin leader + vs residual |
 
 **crossreb detail:** on the full BTC 15m path archive, **rebound-only** stayed near flat-to-slightly-positive after fees (~+1.4% ROI, ~20 trades/day). Default **cross** alone is negative (~−4%) at high n — the older docstring “+2.5%” does **not** reproduce on this dump. Prefer `ENABLE_CROSS=false` + rebound defaults for paper follow-ups, then re-check folds.
 
-**Takeaway:** the **clearest paper plus** was **ineff lead** on path+spot. Unfiltered path-only rules on full BTC 5m/15m paths were typically **−3% to −7% ROI after fees** at high n. **mojo** is the opposite profile: very high WR, tiny $ edge.
+**Takeaway:** the **clearest paper plus** was **ineff lead** on path+spot. Unfiltered path-only rules on full BTC 5m/15m paths were typically **−3% to −7% ROI after fees** at high n. **mojo** is high-WR crumbs; **path_z** mixes low-WR payoff pockets with thin high-WR leader-vs.
 
 ### Other 5m / 15m bots (potential + path checks)
 
@@ -121,9 +124,8 @@ python comeback.py
 Or the curated live shortlist:
 
 ```bash
-cd best-live-algos/mojo
-cp mojo.env.example mojo.env
-python mojo.py   # after adding mojo.py if not yet in tree
+cd best-live-algos/mojo && python mojo.py
+cd best-live-algos/path_z && python path_z.py   # after uploading path_z.py
 ```
 
 Datasets: **[datasets/README.md](datasets/README.md)**.
