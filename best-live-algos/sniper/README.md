@@ -58,7 +58,10 @@ Side from Up midpoint; Down ask = `1 − bid_Up`. FAK / paper fill at ask. Each 
 Re-run the grid on current `datasets/` before trusting the cut — folds can move after regime change.
 
 ---
+Time×price bins with path claim ROI ≥ +4%, 3/3 folds > 0 (12×5m + 7×15m).
 
+Path claim	Paper (full stack)
+Heatmap filter on BTC path	WR ~33%, net negative; late longshot underdogs (~0% WR
 ### Paper (sniper journal, multi-signal stack)
 
 Broad live of the full 19-rule set (multi entries per window, ~40h class run):
