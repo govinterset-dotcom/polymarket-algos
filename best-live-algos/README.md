@@ -1,6 +1,6 @@
 # Best live algorithms
 
-Curated signals with a positive **path backtest** and a stable **paper** run.
+Curated signals with a positive **path backtest** and notes from **paper** runs.
 
 ---
 
@@ -50,17 +50,27 @@ The full comeback core (leader_20 + leader_25 + underdog_50) was net negative on
 
 ```bash
 cd best-live-algos/mojo
-cp mojo.env.example mojo.env   # or use mojo.env
-# PAPER=true by default; live: PAPER=false + keys
+cp mojo.env.example mojo.env
 python mojo.py
 ```
 
-Startup log should show:
+> Paper and path results are **not** live guarantees. High-WR “crumbs”, not high ROI.
 
-```text
-DISABLE_SIGNALS (2): leader_20_090_095, underdog_50_040_045
-active signals: 1
-  ON  leader_25_095_100  leader  frac=0.25  ask=[0.95,1.00)
-```
+---
 
-> Paper and path results are **not** live guarantees. The edge is small — high-WR “crumbs”, not a high-ROI strategy.
+## path_z — role + residual-z (BTC 5m / 15m)
+
+Trade **leader** or **underdog** when Binance residual `z` is already **vs** / **fav** the book leader, at fixed fractions.
+
+**Live core:** `15m_U_fav_20/25/40` + `5m_L_vs_35/40`  
+Details, tables, paper cut: **[path_z/](path_z/)**.
+
+| Block | Path (fees in) | Paper (~21h, broader set) |
+|-------|----------------|---------------------------|
+| 15m underdog + fav | n≈1.3k, WR≈26%, **sum ~+$243** | **+$81** on U_fav rules |
+| 5m leader + vs @35/40 | n≈1.5k, WR≈84%, **sum ~+$135** | sparse on paper; early L_vs_25/30 dragged full run |
+| Full multi-rule paper | — | WR~61%, **−$35**, maxDD ~$−123 |
+
+Tighten with `DISABLE_SIGNALS`, `ONE_SIGNAL_PER_WINDOW=true`. Upload `path_z.py` yourself; env: [`path_z/path_z.env.example`](path_z/path_z.env.example).
+
+> Payoff-driven U_fav (low WR) + thin high-WR L_vs. Regime shifts can flip paper vs path — re-fold after changes.
