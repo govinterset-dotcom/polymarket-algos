@@ -1,66 +1,66 @@
-# Best live algorithms / Лучшие лайв-алгоритмы
+# Best live algorithms
 
-Отобранные сигналы с положительным бэктестом **и** устойчивым paper-прогоном.
+Curated signals with a positive **path backtest** and a stable **paper** run.
 
 ---
 
 ## mojo — `leader_25_095_100`
 
-Единственный активный сигнал (остальные отключены через `DISABLE_SIGNALS` в `mojo.env`):
+Single active rule (others off via `DISABLE_SIGNALS` in `mojo.env`):
 
-| Параметр | Значение |
-|----------|----------|
-| Рынок | BTC up/down **5m** |
-| Момент | **25%** окна (~75-я секунда) |
-| Сторона | **лидер** (mid > 0.5) |
-| Цена | ask ∈ **[0.95, 1.00)** |
-| Исполнение | FAK / paper fill по ask |
+| Parameter | Value |
+|-----------|--------|
+| Market | BTC up/down **5m** |
+| Timing | **25%** of the window (~second 75) |
+| Side | **Leader** (mid > 0.5) |
+| Price | ask ∈ **[0.95, 1.00)** |
+| Execution | FAK / paper fill at ask |
 
-Файлы: [`mojo/mojo.py`](mojo/mojo.py), [`mojo/mojo.env`](mojo/mojo.env).
+Files: [`mojo/mojo.py`](mojo/mojo.py), [`mojo/mojo.env`](mojo/mojo.env).
 
-### Бэктест (path BTC 5m, ~7450 окон, ~37 дней)
+### Backtest (BTC 5m path, ~7,450 windows, ~37 days)
 
-Stake $5, taker fee `0.07×p×(1−p)` + builder 1%:
+Stake $5, taker fee `0.07×p×(1−p)` + 1% builder:
 
-| Метрика | Значение |
-|---------|----------|
-| Сделок | **208** |
+| Metric | Value |
+|--------|--------|
+| Trades | **208** |
 | Win rate | **~99.0%** |
 | Avg ask | ~0.963 |
-| Mean PnL / сделка | **+$0.08** |
+| Mean PnL / trade | **+$0.08** |
 | Sum PnL | **+$16.3** |
-| Частота | **~5.6 / сутки** (в активные дни median ~8) |
-| Недели в плюсе | **6 / 6** |
+| Frequency | **~5.6 / day** (on active days median ~8) |
+| Positive weeks | **6 / 6** |
 
-Edge тонкий (WR − price ≈ +2.7¢ до fee), после fee/builder остаётся небольшой плюс при очень высокой устойчивости.
+Edge is thin (WR − price ≈ +2.7¢ before fees). After fee/builder a small profit remains with very high stability.
 
-### Paper (journal comeback → mojo, 23–26 Nov 2026)
+### Paper (comeback → mojo journal, 23–26 Nov 2026)
 
-Только `leader_25` (в т.ч. окна, где раньше стекался с leader_20):
+`leader_25` only (including windows that previously also fired leader_20):
 
-| Метрика | Значение |
-|---------|----------|
-| Сигналов | **39** за ~4 дня (~10/сутки) |
+| Metric | Value |
+|--------|--------|
+| Signals | **39** over ~4 days (~10/day) |
 | Win rate | **100%** (39/39) |
 | Sum PnL | **~$+2.3** (stake $5) |
 
-Полное ядро comeback (leader_20 + leader_25 + underdog_50) на том же отрезке было в минусе из‑за underdog и более дешёвых leader-карманов. Изоляция **только leader_25** убирает drain.
+The full comeback core (leader_20 + leader_25 + underdog_50) was net negative on the same stretch because of the underdog and cheaper leader pockets. Isolating **leader_25 only** removes that drag.
 
-### Запуск
+### Run
 
 ```bash
 cd best-live-algos/mojo
-cp mojo.env.example mojo.env   # или используйте mojo.env
-# PAPER=true по умолчанию; для live: PAPER=false + ключи
+cp mojo.env.example mojo.env   # or use mojo.env
+# PAPER=true by default; live: PAPER=false + keys
 python mojo.py
 ```
 
-В логе при старте должно быть:
+Startup log should show:
 
 ```text
 DISABLE_SIGNALS (2): leader_20_090_095, underdog_50_040_045
-активных сигналов: 1
+active signals: 1
   ON  leader_25_095_100  leader  frac=0.25  ask=[0.95,1.00)
 ```
 
-> Paper и path **не** гарантируют live. Edge маленький — это «сбор крошек» с высокой WR, не high-ROI стратегия.
+> Paper and path results are **not** live guarantees. The edge is small — high-WR “crumbs”, not a high-ROI strategy.
